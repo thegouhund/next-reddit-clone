@@ -1,0 +1,35 @@
+{
+  "name": "nextjs-reddit-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "bun run src/app/db/migrate.ts",
+    "db:seed": "bun run src/app/db/seed.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.0.1",
+    "axios": "^1.7.7",
+    "mysql2": "^3.11.3",
+    "next": "^14.2.13",
+    "react": "^18",
+    "react-bootstrap-icons": "^1.11.4",
+    "react-dom": "^18",
+    "react-markdown": "8.0.6",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.11",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
