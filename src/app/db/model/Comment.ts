@@ -1,11 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../connection";
 
-class Comment extends Model {
-  postId: number | undefined;
-  userId: number | undefined;
-  parentCommentId: number | undefined;
-}
+class Comment extends Model {}
 
 Comment.init(
   {
@@ -34,6 +30,18 @@ Comment.init(
     sequelize,
     modelName: "Comment",
     tableName: "comment",
+    hooks: {
+      afterCreate: async (comment) => {
+        await sequelize.query(
+          `UPDATE post SET commentCount = commentCount + 1 WHERE id = ${comment.postId}`,
+        );
+      },
+      afterDestroy: async (comment) => {
+        await sequelize.query(
+          `UPDATE post SET commentCount = commentCount - 1 WHERE id = ${comment.postId}`,
+        );
+      },
+    },
   },
 );
 

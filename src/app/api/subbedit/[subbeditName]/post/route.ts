@@ -1,5 +1,5 @@
 import { auth } from "@/app/auth";
-import { Comment, Post, Subbedit, User } from "@models/index";
+import { Post, Subbedit, User } from "@models/index";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -11,7 +11,7 @@ export async function GET(
     include: [
       {
         model: Post,
-        include: [{ model: User }, { model: Comment }, { model: Subbedit }],
+        include: [{ model: User }, { model: Subbedit }],
       },
     ],
     order: [[Post, "createdAt", "DESC"]],

@@ -6,6 +6,7 @@ export interface PostModel {
   Subbedit: SubbeditModel;
   Comments: CommentModel[];
   upvote: number;
+  commentCount: number;
   userId?: number;
   subbeditId?: number;
   createdAt: string;

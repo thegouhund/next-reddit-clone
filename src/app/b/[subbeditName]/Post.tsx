@@ -94,7 +94,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
               <button>
                 <ChatDots size={19} />
               </button>
-              <p>{post.Comments.length}</p>
+              <p>{post.commentCount}</p>
             </div>
           </div>
         </div>
