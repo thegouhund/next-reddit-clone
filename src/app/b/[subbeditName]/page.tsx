@@ -1,79 +1,75 @@
-"use client"
+"use client";
 
-import { useSidebar } from "@/app/context/useSidebar";
-import Post from "./Post";
-import { useEffect, useState } from "react";
-import SidebarContent from "./SidebarContent";
 import { PostModel } from "@/app/types/model";
 import axios from "@configs/axios";
+import useSidebar from "@hooks/useSidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import Post from "./Post";
+import SidebarContent from "./SidebarContent";
 
 function SubbeditPage({ params }: { params: { subbeditName: string } }) {
-    
-    const pathName = usePathname();
-    const { setContent } = useSidebar();
-    const [openedTab, setOpenedTab] = useState(0);
-    const [posts, setPosts] = useState<PostModel[]>([]);
+  const pathName = usePathname();
+  const { setSidebar } = useSidebar();
+  const [openedTab, setOpenedTab] = useState(0);
+  const [posts, setPosts] = useState<PostModel[]>([]);
 
-    useEffect(() => {
-        console.log(params.subbeditName);
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get(`/subbedit/${params.subbeditName}/post`);
-                console.log(response.data);
-                setPosts(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await axios.get(`/subbedit/${params.subbeditName}/post`);
+      console.log(response.data);
+      setPosts(response.data);
+    };
 
-        fetchPosts();
-    }, []);
+    fetchPosts();
+  }, [params.subbeditName]);
 
-    useEffect(() => {
-        setContent(<SidebarContent></SidebarContent>);
+  useEffect(() => {
+    setSidebar(
+      <SidebarContent>
+        <p>{params.subbeditName}</p>
+      </SidebarContent>,
+    );
 
-        return () => setContent(null);
-    }, [setContent, params.subbeditName]);
+    return () => setSidebar(null);
+  }, [setSidebar, params.subbeditName]);
 
-    return (
-        <>
-            <div className="w-full">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-3xl">b/{params.subbeditName}</h2>
-                    <Link href={pathName + "/new"}>Create New Post</Link>
-                </div>
-                <div className="max-[900px]:flex hidden gap-1 mb-4 border-b-2 ">
-                    <button
-                        className={`text-lg border-t-2 border-r-2 border-l-2 rounded-lg rounded-b-none px-2 cursor-pointer transition-all ${openedTab === 0 ? 'bg-slate-200' : 'hover:text-blue-500 hover:bg-slate-200'}`}
-                        onClick={() => setOpenedTab(0)}
-                    >
-                        Posts
-                    </button>
-                    <button
-                        className={`text-lg border-t-2 border-r-2 border-l-2 rounded-lg rounded-b-none px-2 cursor-pointer transition-all ${openedTab === 1 ? 'bg-slate-200' : 'hover:text-blue-500 hover:bg-slate-200'}`}
-                        onClick={() => setOpenedTab(1)}
-                    >
-                        About
-                    </button>
-                </div>
+  return (
+    <>
+      <div className="w-full">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl">b/{params.subbeditName}</h2>
+          <Link href={pathName + "/new"}>Create New Post</Link>
+        </div>
+        <div className="mb-4 hidden gap-1 border-b-2 max-[900px]:flex">
+          <button
+            className={`cursor-pointer rounded-lg rounded-b-none border-l-2 border-r-2 border-t-2 px-2 text-lg transition-all ${openedTab === 0 ? "bg-slate-200" : "hover:bg-slate-200 hover:text-blue-500"}`}
+            onClick={() => setOpenedTab(0)}
+          >
+            Posts
+          </button>
+          <button
+            className={`cursor-pointer rounded-lg rounded-b-none border-l-2 border-r-2 border-t-2 px-2 text-lg transition-all ${openedTab === 1 ? "bg-slate-200" : "hover:bg-slate-200 hover:text-blue-500"}`}
+            onClick={() => setOpenedTab(1)}
+          >
+            About
+          </button>
+        </div>
 
-                {openedTab === 0 ? (
-                    <>
-                        <h3 className="text-2xl">Recent Posts: </h3>
-                        {posts.map((post, index) => {
-                            return (
-                                <Post post={post} key={index} withUser />
-                            )
-                        })}
-                    </>
-                ) : (
-                    <SidebarContent></SidebarContent>
-                )}
-            </div>
-        </>
-    )
+        {openedTab === 0 ? (
+          <>
+            <h3 className="text-2xl">Recent Posts: </h3>
+            {posts.map((post, index) => {
+              return <Post post={post} key={index} withUser />;
+            })}
+          </>
+        ) : (
+          <SidebarContent>{params.subbeditName}</SidebarContent>
+        )}
+      </div>
+    </>
+  );
 }
 
 export default SubbeditPage;

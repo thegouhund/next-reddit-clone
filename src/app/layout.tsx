@@ -1,9 +1,10 @@
+import { Navbar } from "@components/layouts/Navbar";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import { Navbar } from "@components/layouts/Navbar";
 import Sidebar from "./components/layouts/Sidebar";
-import { SidebarProvider } from "./context/useSidebar";
+import "./globals.css";
+import Wrapper from "./wrapper";
+import LoginPopup from "./components/elements/Popup/Login";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,18 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        <main className="flex gap-4 px-8 py-4 {}">
-          <SidebarProvider>
+    <Wrapper>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Navbar />
+          <LoginPopup />
+          <main className="flex gap-4 px-8 py-4">
             {children}
             <Sidebar />
-          </SidebarProvider>
-        </main>
-      </body>
-    </html>
+          </main>
+        </body>
+      </html>
+    </Wrapper>
   );
 }

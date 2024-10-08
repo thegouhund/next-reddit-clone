@@ -15,29 +15,25 @@ const Comment = ({
 
   useEffect(() => {
     const fetchPost = async () => {
-      try {
-        const response = await axios.get(
-          `/subbedit/${params.subbeditName}/post/${params.postId}`,
-        );
-        console.log(response.data);
-        setPost(response.data);
-        setComments(response.data.Comments);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await axios.get(
+        `/subbedit/${params.subbeditName}/post/${params.postId}`,
+      );
+      console.log(response.data);
+      setPost(response.data);
+      setComments(response.data.Comments);
     };
 
     fetchPost();
   }, [params.subbeditName, params.postId]);
 
   return (
-    <>
+    <div className="w-full">
       {post ? (
         <PostDetail post={post} comments={comments} />
       ) : (
         <div>Loading...</div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import axios from "@configs/axios";
 import { useEffect, useState } from "react";
@@ -27,9 +27,7 @@ export default function Home() {
       <h2>Most Recent Posts: </h2>
       <div className="flex flex-col gap-4">
         {posts.map((post) => {
-          return (
-            <Post post={post} key={post.id} withSubbedit />
-          );
+          return <Post post={post} key={post.id} withSubbedit />;
         })}
       </div>
     </div>

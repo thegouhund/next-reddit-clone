@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const SidebarContent = () => {
-  return (
-    <div>SidebarContent</div>
-  )
-}
+const SidebarContent = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
 
-export default SidebarContent
+export default SidebarContent;
