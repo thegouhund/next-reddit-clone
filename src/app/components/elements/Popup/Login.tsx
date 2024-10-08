@@ -74,7 +74,7 @@ const LoginPopup = () => {
               </button>
 
               <button
-                onClick={() => signIn("google")}
+                onClick={() => signIn("discord")}
                 className="flex items-center justify-center gap-2 rounded bg-[#2e3136] px-4 py-3 hover:bg-[#3b3f45]"
               >
                 <Discord color="#fff" />
