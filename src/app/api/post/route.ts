@@ -1,8 +1,15 @@
+import { auth } from "@/app/auth";
 import { Comment } from "@/app/db/model";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
+  const session = await auth();
+
+  if (!session) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
   console.log("body: ", body);
   if (!body.body) {
     return NextResponse.json(
@@ -13,7 +20,7 @@ export const POST = async (request: NextRequest) => {
 
   const comment = await Comment.create({
     body: body.body,
-    userId: body.userId,
+    userId: session.user.id,
     postId: body.postId,
     parentCommentId: body.parentCommentId,
   });
