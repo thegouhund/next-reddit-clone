@@ -26,11 +26,7 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   }, [params.subbeditName]);
 
   useEffect(() => {
-    setSidebar(
-      <SidebarContent>
-        <p>{params.subbeditName}</p>
-      </SidebarContent>,
-    );
+    setSidebar(<p>{params.subbeditName}</p>);
 
     return () => setSidebar(null);
   }, [setSidebar, params.subbeditName]);
@@ -40,7 +36,11 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
       <div className="w-full">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl">b/{params.subbeditName}</h2>
-          <Link href={pathName + "/new"}>Create New Post</Link>
+          <Link href={pathName + "/new"}>
+            <p className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+              Create New Post
+            </p>
+          </Link>
         </div>
         <div className="mb-4 hidden gap-1 border-b-2 max-[900px]:flex">
           <button
@@ -65,7 +65,7 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
             })}
           </>
         ) : (
-          <SidebarContent>{params.subbeditName}</SidebarContent>
+          <SidebarContent> </SidebarContent>
         )}
       </div>
     </>
