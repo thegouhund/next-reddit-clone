@@ -2,27 +2,8 @@ import { faker } from "@faker-js/faker";
 import { Comment, Post, Subbedit, User } from "./model/index";
 
 faker.seed(123);
-const subbedit = {
-  name: faker.lorem.word(),
-};
-
-const user = {
-  username: faker.internet.userName(),
-  email: faker.internet.email(),
-};
-
-const post = {
-  title: faker.lorem.sentence(),
-  body: faker.lorem.sentence(),
-  userId: 1,
-  subbeditId: 1,
-};
 
 (async () => {
-  await Subbedit.create(subbedit);
-  await User.create(user);
-  await Post.create(post);
-
   for (let i = 0; i < 5; i++) {
     const subbedit = await Subbedit.create({
       name: faker.lorem.word(),
