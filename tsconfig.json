@@ -21,9 +21,10 @@
       "@/*": ["./src/*"],
       "@types/*": ["./src/app/types/*"],
       "@components/*": ["./src/app/components/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
       "@models/*": ["./src/app/db/model/"],
       "@configs/*": ["./src/app/config/*"],
-      "@public/*": ["./src/app/public/*"],
+      "@public/*": ["./src/app/public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
