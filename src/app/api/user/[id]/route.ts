@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import User from "@models/User";
+import { User } from "@models/index";
 
 export async function GET(
   _request: NextRequest,

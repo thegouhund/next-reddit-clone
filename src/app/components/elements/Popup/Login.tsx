@@ -1,46 +1,11 @@
 "use client";
 
-import { UserModel } from "@/app/types/model";
-import axios from "@configs/axios";
 import useLoginPopup from "@hooks/useLoginPopup";
-import useUser from "@hooks/useUser";
-import { CredentialResponse } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import { signIn } from "next-auth/react";
-import { useEffect } from "react";
-import { Discord, Google } from "react-bootstrap-icons";
+import { Discord } from "react-bootstrap-icons";
 
 const LoginPopup = () => {
   const { showLoginPopup, setShowLoginPopup } = useLoginPopup();
-  const { setUser } = useUser();
-
-  const handleSuccess = async (credentialResponse: CredentialResponse) => {
-    setShowLoginPopup(false);
-    const response = await axios.post("/auth", {
-      credential: credentialResponse.credential,
-    });
-
-    const user: UserModel = jwtDecode(response.data.token);
-    setUser(user);
-
-    localStorage.setItem("token", response.data.token);
-  };
-
-  // useEffect(() => {
-  //     const token = localStorage.getItem("token");
-
-  //     if (token) {
-  //         const decoded = jwtDecode(token);
-  //         const currentTime = Date.now() / 1000;
-
-  //         if (decoded.exp && decoded.exp > currentTime) {
-  //             setUser(decoded as UserModel);
-  //         } else {
-  //             localStorage.removeItem("token");
-  //             setUser(null);
-  //         }
-  //     }
-  // }, [setUser])
 
   const handleClose = () => setShowLoginPopup(false);
 

@@ -26,8 +26,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const dbUser = await User.findOne({ where: { email: token.email } });
 
         if (dbUser) {
-          token.id = dbUser.id;
-          token.username = dbUser.username;
+          token.id = dbUser.getDataValue("id");
+          token.username = dbUser.getDataValue("username");
         }
       }
       return token;
