@@ -1,22 +1,32 @@
 "use client";
 
-import { CommentModel, PostModel } from "@/app/types/model";
-import React, { FC, useState, useCallback, useMemo } from "react";
+import { CommentWithUser } from "@/app/types/comment";
+import { PostWithUserAndSubbedit } from "@/app/types/post";
 import axios from "@configs/axios";
-import Comment from "./Comment";
 import postImg from "@public/post-img-example.png";
-import Image from "next/image";
 import debounce from "lodash.debounce";
+import Image from "next/image";
+import React, { FC, useCallback, useMemo, useState } from "react";
+import Comment from "./Comment";
+import { useSession } from "next-auth/react";
+import useLoginPopup from "@/app/hooks/useLoginPopup";
 
 interface PostDetailProps {
-  post: PostModel;
-  comments: CommentModel[];
+  post: PostWithUserAndSubbedit;
+  comments: CommentWithUser[];
 }
 
 const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
   const [commentText, setCommentText] = useState("");
+  const { data: session } = useSession();
+  const { openLoginPopup } = useLoginPopup();
 
   const handleCommentSubmit = async () => {
+    if (!session) {
+      openLoginPopup();
+      return;
+    }
+
     await axios.post(
       `/subbedit/${post.Subbedit.name}/post/${post.id}/comment`,
       {
@@ -36,7 +46,7 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
 
   const renderComments = useCallback(
     (
-      comments: CommentModel[],
+      comments: CommentWithUser[],
       parentId: number | null = null,
       indentation: number = 0,
     ) => {

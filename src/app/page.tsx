@@ -2,11 +2,11 @@
 
 import axios from "@configs/axios";
 import { useEffect, useState } from "react";
-import { SubbeditModel, PostModel } from "./types/model";
 import Post from "./b/[subbeditName]/Post";
+import { PostWithUserAndSubbedit } from "./types/post";
 
 export default function Home() {
-  const [posts, setPosts] = useState<PostModel[]>([]);
+  const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {

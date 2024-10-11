@@ -1,4 +1,4 @@
-import { PostModel } from "@/app/types/model";
+import { PostWithUserAndSubbedit } from "@/app/types/post";
 import postImg from "@public/post-img-example.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,21 +7,21 @@ import { FC, useState } from "react";
 import { ArrowDownShort, ArrowUpShort, ChatDots } from "react-bootstrap-icons";
 
 interface PostProps {
-  post: PostModel;
+  post: PostWithUserAndSubbedit;
   withUser?: boolean;
   withSubbedit?: boolean;
 }
 
 const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
-  const [upvote, setUpvote] = useState(post.upvote);
+  const [upvote, setUpvote] = useState<number>(post.upvote || 0);
   const router = useRouter();
 
   const handleUpvote = () => {
-    setUpvote((prev) => prev + 1);
+    setUpvote(upvote + 1);
   };
 
   const handleDownvote = () => {
-    setUpvote((prev) => prev - 1);
+    setUpvote(upvote - 1);
   };
 
   return (
@@ -42,7 +42,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
           <p className="text-sm font-semibold text-gray-600 hover:text-green-500">
             u/{post.User.username}{" "}
             <span className="hover: text-gray-600">
-              &middot; {strToReadable(post.createdAt)} ago
+              &middot; {strToReadable(post.createdAt.toString())} ago
             </span>
           </p>
         )}
@@ -53,7 +53,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
           >
             from b/{post.Subbedit.name}{" "}
             <span className="hover: text-gray-600">
-              &middot; {strToReadable(post.createdAt)} ago
+              &middot; {strToReadable(post.createdAt.toString())} ago
             </span>
           </Link>
         )}

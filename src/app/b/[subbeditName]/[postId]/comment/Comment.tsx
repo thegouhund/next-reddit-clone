@@ -1,10 +1,12 @@
-import { CommentModel } from "@/app/types/model";
 import axios from "@configs/axios";
+import { CommentWithUser } from "@/app/types/comment";
 import React, { FC, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useSession } from "next-auth/react";
+import useLoginPopup from "@/app/hooks/useLoginPopup";
 
 interface CommentProps {
-  comment: CommentModel;
+  comment: CommentWithUser;
   indentation: number;
   postId: number;
 }
@@ -12,8 +14,14 @@ interface CommentProps {
 const Comment: FC<CommentProps> = ({ comment, indentation, postId }) => {
   const [showReplyBox, setShowReplyBox] = useState<boolean>(false);
   const [commentText, setCommentText] = useState<string>("");
+  const { data: session } = useSession();
+  const { openLoginPopup } = useLoginPopup();
 
   const handleCommentSubmit = async () => {
+    if (!session) {
+      openLoginPopup();
+      return;
+    }
     const response = await axios.post(`/post`, {
       body: commentText,
       postId: postId,

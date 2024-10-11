@@ -1,16 +1,16 @@
 "use client";
 
-import { PostModel } from "@/app/types/model";
 import axios from "@configs/axios";
 import React, { useEffect, useState } from "react";
 import PostDetail from "./PostDetail";
+import { PostWithUserAndSubbedit } from "@/app/types/post";
 
 const Comment = ({
   params,
 }: {
   params: { subbeditName: string; postId: number };
 }) => {
-  const [post, setPost] = useState<PostModel>();
+  const [post, setPost] = useState<PostWithUserAndSubbedit>();
   const [comments, setComments] = useState([]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { PostModel } from "@/app/types/model";
+import { PostWithUserAndSubbedit } from "@/app/types/post";
 import axios from "@configs/axios";
 import useSidebar from "@hooks/useSidebar";
 import Link from "next/link";
@@ -13,7 +13,7 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   const pathName = usePathname();
   const { setSidebar } = useSidebar();
   const [openedTab, setOpenedTab] = useState(0);
-  const [posts, setPosts] = useState<PostModel[]>([]);
+  const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
