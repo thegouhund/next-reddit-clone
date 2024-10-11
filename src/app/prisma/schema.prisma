@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  username String?   @unique(map: "username") @db.VarChar(255)
+  email    String    @unique(map: "email") @db.VarChar(255)
+  Comment  Comment[]
+  Post     Post[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("user")
+}
+
+model Subbedit {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "name") @db.VarChar(255)
+  Post Post[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("subbedit")
+}
+
+model Post {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(255)
+  body         String    @db.Text
+  upvote       Int?      @default(0)
+  commentCount Int?      @default(0)
+  userId       Int
+  subbeditId   Int
+  Comment      Comment[]
+  User         User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "post_ibfk_1")
+  Subbedit     Subbedit  @relation(fields: [subbeditId], references: [id], onDelete: Cascade, map: "post_ibfk_2")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([subbeditId], map: "subbeditId")
+  @@index([userId], map: "userId")
+  @@map("post")
+}
+
+model Comment {
+  id              Int       @id @default(autoincrement())
+  body            String    @db.VarChar(255)
+  upvote          Int?      @default(0)
+  userId          Int
+  postId          Int
+  parentCommentId Int?
+  User            User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "comment_ibfk_1")
+  Post            Post      @relation(fields: [postId], references: [id], onDelete: Cascade, map: "comment_ibfk_2")
+  Comment         Comment?  @relation("commentTocomment", fields: [parentCommentId], references: [id], map: "comment_ibfk_3")
+  other_comment   Comment[] @relation("commentTocomment")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([parentCommentId], map: "parentCommentId")
+  @@index([postId], map: "postId")
+  @@index([userId], map: "userId")
+  @@map("comment")
+}
+

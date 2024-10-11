@@ -1,16 +1,13 @@
-import { Comment, Subbedit, User } from "@models/index";
-import { Post } from "@models/index";
+import prisma from "@/app/config/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { postId: string } },
 ) {
-  const post = await Post.findByPk(parseInt(params.postId, 36), {
-    include: [
-      { model: Comment, include: [{ model: User }] },
-      { model: Subbedit },
-    ],
+  const post = await prisma.post.findUnique({
+    where: { id: parseInt(params.postId, 36) },
+    include: { Subbedit: true, Comment: { include: { User: true } } },
   });
 
   if (!post) {

@@ -1,5 +1,6 @@
 import { auth } from "@/app/auth";
-import { Comment } from "@/app/db/model";
+import prisma from "@/app/config/db";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -18,11 +19,15 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  const comment = await Comment.create({
+  const commentData: Prisma.CommentUncheckedCreateInput = {
     body: body.body,
     userId: session.user.id,
     postId: body.postId,
     parentCommentId: body.parentCommentId,
+  };
+
+  const comment = await prisma.comment.create({
+    data: commentData,
   });
 
   return NextResponse.json(comment, { status: 201 });

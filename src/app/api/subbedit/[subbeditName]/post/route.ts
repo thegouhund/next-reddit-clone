@@ -1,40 +1,39 @@
 import { auth } from "@/app/auth";
-import { Post, Subbedit, User } from "@models/index";
+import prisma from "@/app/config/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { subbeditName: number } },
+  { params }: { params: { subbeditName: string } },
 ) {
-  const subbedit = await Subbedit.findOne({
+  const subbeditWithPosts = await prisma.subbedit.findUnique({
     where: { name: params.subbeditName },
-    include: [
-      {
-        model: Post,
-        include: [{ model: User }, { model: Subbedit }],
+    include: {
+      Post: {
+        include: { User: true, Subbedit: true },
+        orderBy: { createdAt: "desc" },
       },
-    ],
-    order: [[Post, "createdAt", "DESC"]],
-    limit: 1,
+    },
   });
 
-  if (!subbedit) {
-    return NextResponse.json({ error: "Subbedit not found" }, { status: 404 });
+  if (!subbeditWithPosts) {
+    return NextResponse.json(
+      { message: "Subbedit not found" },
+      { status: 404 },
+    );
   }
 
-  return NextResponse.json(subbedit.Posts, { status: 200 });
+  console.log(JSON.stringify(subbeditWithPosts.Post, null, 2));
+
+  return NextResponse.json(subbeditWithPosts.Post, { status: 200 });
 }
 
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { subbeditName: number } },
+  { params }: { params: { subbeditName: string } },
 ) => {
   const session = await auth();
   const body = await request.json();
-  const subbedit = await Subbedit.findOne({
-    where: { name: params.subbeditName },
-    attributes: ["id"],
-  });
 
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -47,6 +46,11 @@ export const POST = async (
     );
   }
 
+  const subbedit = await prisma.subbedit.findUnique({
+    where: { name: params.subbeditName },
+    select: { id: true },
+  });
+
   if (!subbedit) {
     return NextResponse.json(
       { message: "Subbedit not found" },
@@ -54,10 +58,12 @@ export const POST = async (
     );
   }
 
-  const post = await Post.create({
-    ...body,
-    userId: session.user.id,
-    subbeditId: subbedit.getDataValue("id"),
+  const post = await prisma.post.create({
+    data: {
+      ...body,
+      userId: session.user.id,
+      subbeditId: subbedit.id,
+    }
   });
 
   return NextResponse.json(post, { status: 201 });

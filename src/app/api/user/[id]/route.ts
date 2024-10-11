@@ -1,11 +1,11 @@
+import prisma from "@/app/config/db";
 import { NextRequest, NextResponse } from "next/server";
-import { User } from "@models/index";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: number } },
 ) {
-  const users = await User.findByPk(params.id);
+  const users = await prisma.user.findUnique({ where: { id: params.id } });
   if (!users) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
