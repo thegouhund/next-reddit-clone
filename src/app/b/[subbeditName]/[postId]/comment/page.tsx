@@ -20,7 +20,7 @@ const Comment = ({
       );
       console.log(response.data);
       setPost(response.data);
-      setComments(response.data.Comments);
+      setComments(response.data.Comment);
     };
 
     fetchPost();
