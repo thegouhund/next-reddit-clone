@@ -1,27 +1,17 @@
 import { auth } from "@/app/auth";
-import { Comment, Subbedit } from "@/app/db/model";
+import prisma from "@/app/config/db";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { subbeditName: number; postId: string } },
+  { params }: { params: { subbeditName: string; postId: string } },
 ) {
   const session = await auth();
   const body = await request.json();
-  const subbedit = await Subbedit.findOne({
-    where: { name: params.subbeditName },
-    attributes: ["id"],
-  });
 
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
-
-  if (!subbedit) {
-    return NextResponse.json(
-      { message: "Subbedit not found" },
-      { status: 404 },
-    );
   }
 
   if (!body.body) {
@@ -31,12 +21,27 @@ export async function POST(
     );
   }
 
-  const comment = await Comment.create({
-    ...body,
-    userId: session.user.id,
-    postId: params.postId,
-    subbeditId: subbedit.getDataValue("id"),
+  const subbedit = await prisma.subbedit.findUnique({
+    where: { name: params.subbeditName },
+    select: { id: true },
   });
+
+  if (!subbedit) {
+    return NextResponse.json(
+      { message: "Subbedit not found" },
+      { status: 404 },
+    );
+  }
+
+  const commentData: Prisma.CommentUncheckedCreateInput = {
+    body: body.body,
+    userId: parseInt(session.user.id),
+    postId: parseInt(params.postId),
+  }
+
+  const comment = await prisma.comment.create({
+    data: commentData,
+  } );
 
   return NextResponse.json(comment, { status: 201 });
 }
