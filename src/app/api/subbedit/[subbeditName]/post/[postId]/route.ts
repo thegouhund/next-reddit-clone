@@ -10,8 +10,6 @@ export async function GET(
     include: { Subbedit: true, Comment: { include: { User: true } } },
   });
 
-  console.log(post);
-
   if (!post) {
     return NextResponse.json({ message: "Post not found" }, { status: 404 });
   }
