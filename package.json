@@ -9,9 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "db:migrate": "bun run src/app/db/migrate.ts",
-    "db:seed": "bun run src/app/db/seed.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@faker-js/faker": "^9.0.1",
@@ -19,7 +17,6 @@
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "lodash.debounce": "^4.0.8",
-    "mysql2": "^3.11.3",
     "next": "^14.2.13",
     "next-auth": "^5.0.0-beta.22",
     "prettier": "^3.3.3",
@@ -28,7 +25,6 @@
     "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18",
     "react-markdown": "8.0.6",
-    "sequelize": "^6.37.3",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
