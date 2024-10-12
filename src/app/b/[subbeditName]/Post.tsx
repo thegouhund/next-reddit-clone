@@ -33,11 +33,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
         )
       }
     >
-      <Link
-        onClick={(e) => e.stopPropagation()}
-        href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
-        passHref
-      >
+      <div onClick={(e) => e.stopPropagation()}>
         {withUser && (
           <p className="text-sm font-semibold text-gray-600 hover:text-green-500">
             u/{post.User.username}{" "}
@@ -58,7 +54,12 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
           </Link>
         )}
 
-        <h3 className="text-xl font-bold hover:underline">{post.title}</h3>
+        <Link
+          href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
+          passHref
+        >
+          <h3 className="text-xl font-bold hover:underline">{post.title}</h3>
+        </Link>
         <div className="mb-2 flex gap-2">
           <span className="rounded-full bg-yellow-300 px-2 text-sm text-black">
             Tech
@@ -71,6 +72,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
           src={postImg}
           alt="Image Post"
           width={600}
+          height={400}
           className="rounded-lg"
         />
         <div className="mt-2 flex">
@@ -98,7 +100,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </article>
   );
 };

@@ -3,45 +3,87 @@
 import { PostWithUserAndSubbedit } from "@/app/types/post";
 import axios from "@configs/axios";
 import useSidebar from "@hooks/useSidebar";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Plus, ThreeDots } from "react-bootstrap-icons";
 import Post from "./Post";
 import SidebarContent from "./SidebarContent";
 
 function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   const pathName = usePathname();
-  const { setSidebar } = useSidebar();
   const [openedTab, setOpenedTab] = useState(0);
   const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
+  const [isJoined, setIsJoined] = useState<boolean>(true);
+
+  const { setSidebar } = useSidebar();
+  const { data: session } = useSession();
+
+  const handleJoinSubbedit = async () => {
+    const response = await axios.post(`/subbedit/${params.subbeditName}/join`);
+    console.log(response.data);
+    if (response.data) {
+      setIsJoined(true);
+    }
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await axios.get(`/subbedit/${params.subbeditName}/post`);
-      console.log(response.data);
-      setPosts(response.data);
+      const data = await fetch(`/api/subbedit/${params.subbeditName}/post`, {
+        cache: "force-cache",
+      });
+      const response = await data.json();
+      console.log(response);
+      setPosts(response);
     };
 
     fetchPosts();
-  }, [params.subbeditName]);
+  }, [params.subbeditName, session]);
 
   useEffect(() => {
-    setSidebar(<p>{params.subbeditName}</p>);
+    if (session) {
+      const joined = session.user.subbedits.some(
+        (subbedit) => subbedit.name === params.subbeditName,
+      );
+      setIsJoined(joined);
+    }
+  }, [params.subbeditName, session]);
 
-    return () => setSidebar(null);
-  }, [setSidebar, params.subbeditName]);
+  useEffect(() => {
+    setSidebar(
+      <SidebarContent subbeditName={params.subbeditName}></SidebarContent>,
+    );
+  }, [setSidebar, params.subbeditName, posts]);
 
   return (
     <>
       <div className="w-full">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl">b/{params.subbeditName}</h2>
-          <Link href={pathName + "/new"}>
-            <p className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
-              Create New Post
-            </p>
-          </Link>
+          {isJoined ? (
+            <div className="flex items-center gap-4">
+              <Link href={pathName + "/new"}>
+                <button className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+                  <div className="flex items-center gap-1">
+                    <Plus size={24} />
+                    Create New Post
+                  </div>
+                </button>
+              </Link>
+              <button className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+                <ThreeDots color="white" size={24} />
+              </button>
+            </div>
+          ) : (
+            <button onClick={handleJoinSubbedit}>
+              <p className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+                + Join
+              </p>
+            </button>
+          )}
         </div>
+
         <div className="mb-4 hidden gap-1 border-b-2 max-[900px]:flex">
           <button
             className={`cursor-pointer rounded-lg rounded-b-none border-l-2 border-r-2 border-t-2 px-2 text-lg transition-all ${openedTab === 0 ? "bg-slate-200" : "hover:bg-slate-200 hover:text-blue-500"}`}
@@ -60,12 +102,16 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
         {openedTab === 0 ? (
           <>
             <h3 className="text-2xl">Recent Posts: </h3>
-            {posts.map((post, index) => {
-              return <Post post={post} key={index} withUser />;
-            })}
+            {posts.length === 0 ? (
+              <p>No posts yet.</p>
+            ) : (
+              posts.map((post: PostWithUserAndSubbedit, index: number) => (
+                <Post post={post} key={index} withUser />
+              ))
+            )}
           </>
         ) : (
-          <SidebarContent> </SidebarContent>
+          <SidebarContent subbeditName={params.subbeditName} />
         )}
       </div>
     </>

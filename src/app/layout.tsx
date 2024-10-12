@@ -29,10 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <Wrapper>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+      <html
+        lang="en"
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <body>
           <Navbar />
           <LoginPopup />
           <main className="flex gap-4 px-8 py-4">
