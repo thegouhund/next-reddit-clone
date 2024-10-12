@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
-faker.seed(123);
-
 const prisma = new PrismaClient();
 
 async function main() {

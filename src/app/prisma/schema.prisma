@@ -8,25 +8,41 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  username String?   @unique(map: "username") @db.VarChar(255)
-  email    String    @unique(map: "email") @db.VarChar(255)
-  Comment  Comment[]
-  Post     Post[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id           Int            @id @default(autoincrement())
+  username     String?        @unique(map: "username") @db.VarChar(255)
+  email        String         @unique(map: "email") @db.VarChar(255)
+  Comment      Comment[]
+  Post         Post[]
+  Subbedits    UserSubbedit[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
   @@map("user")
 }
 
 model Subbedit {
-  id   Int    @id @default(autoincrement())
-  name String @unique(map: "name") @db.VarChar(255)
-  Post Post[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id        Int            @id @default(autoincrement())
+  name      String         @unique(map: "name") @db.VarChar(255)
+  Post      Post[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  Users     UserSubbedit[]
 
   @@map("subbedit")
+}
+
+model UserSubbedit {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  subbeditId Int
+  joinedAt   DateTime @default(now())
+
+  User     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Subbedit Subbedit @relation(fields: [subbeditId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, subbeditId])
+  @@index([userId])
+  @@index([subbeditId])
 }
 
 model Post {
@@ -40,8 +56,8 @@ model Post {
   Comment      Comment[]
   User         User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "post_ibfk_1")
   Subbedit     Subbedit  @relation(fields: [subbeditId], references: [id], onDelete: Cascade, map: "post_ibfk_2")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@index([subbeditId], map: "subbeditId")
   @@index([userId], map: "userId")
@@ -67,4 +83,3 @@ model Comment {
   @@index([userId], map: "userId")
   @@map("comment")
 }
-
