@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { create } from "zustand";
-import { UserModel } from "../types/model";
+import type { User as UserModel } from "@prisma/client";
 
 interface UserState {
   user: UserModel | null;

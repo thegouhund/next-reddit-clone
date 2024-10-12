@@ -25,6 +25,5 @@ export async function POST(request: NextRequest) {
   }
 
   const subbedit = await prisma.subbedit.create(body);
-  console.log(subbedit);
   return NextResponse.json(subbedit, { status: 201 });
 }

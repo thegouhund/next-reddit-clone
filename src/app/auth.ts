@@ -39,10 +39,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
 
-    session({ session, token }) {
+    async session({ session, token }) {
       if (session.user) {
+        const subbedits = await prisma.userSubbedit.findMany({
+          where: { userId: token.id as number },
+          include: {
+            Subbedit: true,
+          },
+        });
+
         session.user.id = token.id as string;
         session.user.username = token.username as string;
+        session.user.subbedits = subbedits.map((us) => us.Subbedit);
       }
       return session;
     },

@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
 
   const commentData: Prisma.CommentUncheckedCreateInput = {
     body: body.body,
-    userId: session.user.id,
+    userId: parseInt(session.user.id),
     postId: body.postId,
     parentCommentId: body.parentCommentId,
   };

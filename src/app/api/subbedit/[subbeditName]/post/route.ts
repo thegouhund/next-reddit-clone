@@ -23,8 +23,6 @@ export async function GET(
     );
   }
 
-  console.log(JSON.stringify(subbeditWithPosts.Post, null, 2));
-
   return NextResponse.json(subbeditWithPosts.Post, { status: 200 });
 }
 
