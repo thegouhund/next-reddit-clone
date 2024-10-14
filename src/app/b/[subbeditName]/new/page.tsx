@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "@configs/axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -24,11 +23,19 @@ const FormNewPost = ({ params }: { params: { subbeditName: string } }) => {
       return;
     }
     console.log(session);
-    const response = await axios.post(`/subbedit/${params.subbeditName}/post`, {
-      title,
-      body: content,
-    });
-    console.log(response.data);
+    const data = await(await fetch(`/api/subbedit/${params.subbeditName}/post`, 
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          body: content,
+        }),
+      })).json();
+
+    console.log(data);
     router.back();
   };
 

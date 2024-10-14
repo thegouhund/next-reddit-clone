@@ -3,60 +3,85 @@ import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  for (let i = 0; i < 5; i++) {
-    const subbedit = await prisma.subbedit.create({
-      data: {
-        name: faker.lorem.word(),
-      },
-    });
+async function createSubbedits(count: number) {
+  return Promise.all(
+    Array.from({ length: count }, () =>
+      prisma.subbedit.create({
+        data: { name: faker.lorem.word() },
+      }),
+    ),
+  );
+}
 
-    const user = await prisma.user.create({
-      data: {
-        username: faker.internet.userName(),
-        email: faker.internet.email(),
-      },
-    });
+async function createUsers(count: number) {
+  return Promise.all(
+    Array.from({ length: count }, () =>
+      prisma.user.create({
+        data: {
+          username: faker.internet.userName(),
+          email: faker.internet.email(),
+        },
+      }),
+    ),
+  );
+}
 
-    for (let j = 0; j < 5; j++) {
-      const post = await prisma.post.create({
+async function createPosts(count: number, userId: number, subbeditId: number) {
+  return Promise.all(
+    Array.from({ length: count }, () =>
+      prisma.post.create({
         data: {
           title: faker.lorem.sentence(),
           body: faker.lorem.paragraphs(),
-          userId: user.id,
-          subbeditId: subbedit.id,
+          userId,
+          subbeditId,
         },
-      });
+      }),
+    ),
+  );
+}
 
-      for (let k = 0; k < 10; k++) {
-        const comment = await prisma.comment.create({
-          data: {
-            body: faker.lorem.sentence(),
-            userId: user.id,
-            postId: post.id,
-            parentCommentId: null,
-          },
-        });
+async function createComments(
+  count: number,
+  userId: number,
+  postId: number,
+  parentCommentId: number | null = null,
+) {
+  return Promise.all(
+    Array.from({ length: count }, () =>
+      prisma.comment.create({
+        data: {
+          body: faker.lorem.sentence(),
+          userId,
+          postId,
+          parentCommentId,
+        },
+      }),
+    ),
+  );
+}
 
-        for (let l = 0; l < 2; l++) {
-          const childComment = await prisma.comment.create({
-            data: {
-              body: faker.lorem.sentence(),
-              userId: user.id,
-              postId: post.id,
-              parentCommentId: comment.id,
-            },
-          });
+async function main() {
+  const subbedits = await createSubbedits(5);
+  const users = await createUsers(5);
 
-          for (let m = 0; m < 2; m++) {
-            await prisma.comment.create({
-              data: {
-                body: faker.lorem.sentence(),
-                userId: user.id,
-                postId: post.id,
-                parentCommentId: childComment.id,
-              },
-            });
+  for (const subbedit of subbedits) {
+    for (const user of users) {
+      const posts = await createPosts(5, user.id, subbedit.id);
+
+      for (const post of posts) {
+        const comments = await createComments(10, user.id, post.id);
+
+        for (const comment of comments) {
+          const childComments = await createComments(
+            2,
+            user.id,
+            post.id,
+            comment.id,
+          );
+
+          for (const childComment of childComments) {
+            await createComments(2, user.id, post.id, childComment.id);
           }
         }
       }
