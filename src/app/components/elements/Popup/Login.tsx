@@ -30,7 +30,7 @@ const LoginPopup = () => {
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => signIn("google")}
-                className="flex items-center justify-center gap-2 rounded border bg-white px-4 py-3 transition-all hover:border-blue-100 hover:bg-blue-200 hover:bg-opacity-5"
+                className="flex items-center justify-center gap-2 rounded-md border bg-white px-4 py-3 transition-all hover:border-blue-100 hover:bg-blue-200 hover:bg-opacity-5"
               >
                 <GoogleIcon />
                 <p className="flex-1 text-center text-sm text-gray-700">
@@ -40,9 +40,9 @@ const LoginPopup = () => {
 
               <button
                 onClick={() => signIn("discord")}
-                className="flex items-center justify-center gap-2 rounded bg-[#2e3136] px-4 py-3 hover:bg-[#3b3f45]"
+                className="flex items-center justify-center gap-2 rounded-md border border-[#2e3136] bg-[#2e3136] px-4 py-3 hover:bg-[#3b3f45]"
               >
-                <Discord color="#fff" />
+                <Discord size={20} color="#fff" />
                 <p className="flex-1 text-center text-sm text-white">
                   Sign in with Discord
                 </p>
