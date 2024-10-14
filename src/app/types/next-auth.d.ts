@@ -1,4 +1,4 @@
-import type { User as UserType } from "@prisma/client";
+import type { Subbedit, User as UserType } from "@prisma/client";
 import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -6,6 +6,7 @@ declare module "next-auth" {
     user:  {
       id: string;
       username: string;
+      subbedits: Subbedit[];
     } & DefaultSession["user"];
   }
 
