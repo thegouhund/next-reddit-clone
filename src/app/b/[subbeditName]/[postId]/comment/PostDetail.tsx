@@ -2,7 +2,6 @@
 
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import axios from "@configs/axios";
 import postImg from "@public/post-img-example.png";
 import debounce from "lodash.debounce";
 import Image from "next/image";
@@ -27,12 +26,13 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
       return;
     }
 
-    await axios.post(
-      `/subbedit/${post.Subbedit.name}/post/${post.id}/comment`,
-      {
-        body: commentText,
+    await fetch(`/api/subbedit/${post.Subbedit.name}/post/${post.id}/comment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({ body: commentText }),
+    });
     setCommentText("");
 
     window.location.reload();
@@ -74,6 +74,7 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
         alt="Image Post"
         width={600}
         className="rounded-lg"
+        priority
       />
       <h3 className="text-base font-medium">{post.body}</h3>
 

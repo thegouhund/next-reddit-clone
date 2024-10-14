@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "@configs/axios";
 import React, { useEffect, useState } from "react";
 import PostDetail from "./PostDetail";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
@@ -15,12 +14,12 @@ const Comment = ({
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await axios.get(
-        `/subbedit/${params.subbeditName}/post/${params.postId}`,
-      );
-      console.log(response.data);
-      setPost(response.data);
-      setComments(response.data.Comment);
+      const data = await (
+        await fetch(`/api/subbedit/${params.subbeditName}/post/${params.postId}`)
+      ).json();
+      console.log(data);
+      setPost(data);
+      setComments(data.Comment);
     };
 
     fetchPost();

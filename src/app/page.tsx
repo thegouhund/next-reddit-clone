@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "@configs/axios";
 import { useEffect, useState } from "react";
 import Post from "./b/[subbeditName]/Post";
 import { PostWithUserAndSubbedit } from "./types/post";
@@ -11,9 +10,10 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("/post/recent");
-        console.log(response.data);
-        setPosts(response.data);
+        const response = await fetch("api/post/recent");
+        const data = await response.json();
+        console.log(data);
+        setPosts(data);
       } catch (error) {
         console.error(error);
       }

@@ -1,4 +1,3 @@
-import axios from "@configs/axios";
 import { CommentWithUser } from "@/app/types/comment";
 import React, { FC, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -22,12 +21,21 @@ const Comment: FC<CommentProps> = ({ comment, indentation, postId }) => {
       openLoginPopup();
       return;
     }
-    const response = await axios.post(`/post`, {
-      body: commentText,
-      postId: postId,
-      parentCommentId: comment.id,
-    });
-    console.log(response.data);
+    const data = await (
+      await fetch(`/api/post`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          body: commentText,
+          postId: postId,
+          parentCommentId: comment.id,
+        }),
+      })
+    ).json();
+
+    console.log(data);
     setCommentText("");
     setShowReplyBox(false);
 

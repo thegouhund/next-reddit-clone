@@ -1,15 +1,12 @@
 "use client";
 
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import axios from "@configs/axios";
-import useSidebar from "@hooks/useSidebar";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Plus, ThreeDots } from "react-bootstrap-icons";
 import Post from "./Post";
-import SidebarContent from "./SidebarContent";
 
 function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   const pathName = usePathname();
@@ -17,25 +14,28 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
   const [isJoined, setIsJoined] = useState<boolean>(true);
 
-  const { setSidebar } = useSidebar();
   const { data: session } = useSession();
 
   const handleJoinSubbedit = async () => {
-    const response = await axios.post(`/subbedit/${params.subbeditName}/join`);
-    console.log(response.data);
-    if (response.data) {
+    const data = await (
+      await fetch(`/api/subbedit/${params.subbeditName}/join`, {
+        method: "POST",
+      })
+    ).json();
+
+    console.log(data);
+    if (data) {
       setIsJoined(true);
     }
   };
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const data = await fetch(`/api/subbedit/${params.subbeditName}/post`, {
-        cache: "force-cache",
-      });
-      const response = await data.json();
-      console.log(response);
-      setPosts(response);
+      const data = await (
+        await fetch(`/api/subbedit/${params.subbeditName}/post`)
+      ).json();
+      console.log(data);
+      setPosts(data);
     };
 
     fetchPosts();
@@ -49,12 +49,6 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
       setIsJoined(joined);
     }
   }, [params.subbeditName, session]);
-
-  useEffect(() => {
-    setSidebar(
-      <SidebarContent subbeditName={params.subbeditName}></SidebarContent>,
-    );
-  }, [setSidebar, params.subbeditName, posts]);
 
   return (
     <>
@@ -110,9 +104,7 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
               ))
             )}
           </>
-        ) : (
-          <SidebarContent subbeditName={params.subbeditName} />
-        )}
+        ) : null}
       </div>
     </>
   );
