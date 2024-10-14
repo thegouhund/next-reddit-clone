@@ -1,9 +1,10 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -60,7 +61,7 @@ model Post {
   updatedAt    DateTime  @updatedAt
 
   @@index([subbeditId], map: "subbeditId")
-  @@index([userId], map: "userId")
+  @@index([userId], map: "user_id_post")
   @@map("post")
 }
 
@@ -80,6 +81,6 @@ model Comment {
 
   @@index([parentCommentId], map: "parentCommentId")
   @@index([postId], map: "postId")
-  @@index([userId], map: "userId")
+  @@index([userId], map: "user_id_comment")
   @@map("comment")
 }
