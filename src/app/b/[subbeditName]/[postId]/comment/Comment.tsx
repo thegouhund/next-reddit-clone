@@ -1,16 +1,23 @@
-import { CommentWithUser } from "@/app/types/comment";
-import React, { FC, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { useSession } from "next-auth/react";
 import useLoginPopup from "@/app/hooks/useLoginPopup";
+import { CommentWithUser } from "@/app/types/comment";
+import { useSession } from "next-auth/react";
+import { FC, useState } from "react";
+import { Chat } from "react-bootstrap-icons";
+import ReactMarkdown from "react-markdown";
 
 interface CommentProps {
   comment: CommentWithUser;
   indentation: number;
   postId: number;
+  addComment: (comment: CommentWithUser) => void;
 }
 
-const Comment: FC<CommentProps> = ({ comment, indentation, postId }) => {
+const Comment: FC<CommentProps> = ({
+  comment,
+  indentation,
+  postId,
+  addComment,
+}) => {
   const [showReplyBox, setShowReplyBox] = useState<boolean>(false);
   const [commentText, setCommentText] = useState<string>("");
   const { data: session } = useSession();
@@ -29,30 +36,48 @@ const Comment: FC<CommentProps> = ({ comment, indentation, postId }) => {
         },
         body: JSON.stringify({
           body: commentText,
-          postId: postId,
+          postId: parseInt("" + postId, 36),
           parentCommentId: comment.id,
         }),
       })
     ).json();
 
-    console.log(data);
     setCommentText("");
     setShowReplyBox(false);
+    addComment(data as CommentWithUser);
 
-    window.location.reload();
+    setTimeout(() => {
+      const newCommentElement = document.getElementById(`comment-${data.id}`);
+      if (newCommentElement) {
+        newCommentElement.scrollIntoView({ behavior: "smooth" });
+        newCommentElement.style.backgroundColor = "#DDD";
+        setTimeout(() => {
+          newCommentElement.style.backgroundColor = "";
+        }, 3000);
+      }
+    }, 100);
   };
 
   return (
     <div
       key={comment.id}
-      className="mb-1"
+      id={`comment-${comment.id}`}
+      className="relative mb-3 transition-colors rounded"
       style={{ marginLeft: `${indentation}px` }}
     >
+      <div
+        className="absolute bottom-0 left-0 top-0 w-[2px] bg-gray-300"
+        style={{ left: "-10px" }}
+      ></div>
       <p>u/{comment.User.username}</p>
       <ReactMarkdown className="prose prose-gray prose-blue">
         {comment.body}
       </ReactMarkdown>
-      <button onClick={() => setShowReplyBox(true)} className="bg-gray-300">
+      <button
+        onClick={() => setShowReplyBox(true)}
+        className="text-md mb-2 flex items-center gap-1.5 rounded px-2 py-1 transition-colors hover:bg-gray-300"
+      >
+        <Chat size={20} />
         reply
       </button>
       {showReplyBox && (

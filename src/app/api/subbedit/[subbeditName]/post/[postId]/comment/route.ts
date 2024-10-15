@@ -37,11 +37,12 @@ export async function POST(
     body: body.body,
     userId: parseInt(session.user.id),
     postId: parseInt(params.postId),
-  }
+  };
 
   const comment = await prisma.comment.create({
     data: commentData,
-  } );
+    include: { User: true },
+  });
 
   return NextResponse.json(comment, { status: 201 });
 }

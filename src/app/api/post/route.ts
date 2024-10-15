@@ -28,6 +28,7 @@ export const POST = async (request: NextRequest) => {
 
   const comment = await prisma.comment.create({
     data: commentData,
+    include: { User: true },
   });
 
   return NextResponse.json(comment, { status: 201 });

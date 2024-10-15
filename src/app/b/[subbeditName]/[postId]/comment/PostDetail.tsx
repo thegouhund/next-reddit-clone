@@ -1,21 +1,20 @@
 "use client";
 
+import useLoginPopup from "@/app/hooks/useLoginPopup";
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
 import postImg from "@public/post-img-example.png";
 import debounce from "lodash.debounce";
-import Image from "next/image";
-import React, { FC, useCallback, useMemo, useState } from "react";
-import Comment from "./Comment";
 import { useSession } from "next-auth/react";
-import useLoginPopup from "@/app/hooks/useLoginPopup";
+import Image from "next/image";
+import React, { FC, useMemo, useState } from "react";
 
 interface PostDetailProps {
   post: PostWithUserAndSubbedit;
-  comments: CommentWithUser[];
+  addComment: (comment: CommentWithUser) => void;
 }
 
-const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
+const PostDetail: FC<PostDetailProps> = ({ post, addComment }): JSX.Element => {
   const [commentText, setCommentText] = useState("");
   const { data: session } = useSession();
   const { openLoginPopup } = useLoginPopup();
@@ -25,17 +24,33 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
       openLoginPopup();
       return;
     }
-
-    await fetch(`/api/subbedit/${post.Subbedit.name}/post/${post.id}/comment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ body: commentText }),
-    });
     setCommentText("");
 
-    window.location.reload();
+    const data = await (
+      await fetch(
+        `/api/subbedit/${post.Subbedit.name}/post/${post.id}/comment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ body: commentText }),
+        },
+      )
+    ).json();
+
+    addComment(data as CommentWithUser);
+
+    setTimeout(() => {
+      const newCommentElement = document.getElementById(`comment-${data.id}`);
+      if (newCommentElement) {
+        newCommentElement.scrollIntoView({ behavior: "smooth" });
+        newCommentElement.style.backgroundColor = "#DDD";
+        setTimeout(() => {
+          newCommentElement.style.backgroundColor = "";
+        }, 3000);
+      }
+    }, 100);
   };
 
   const debouncedSetCommentText = useMemo(() => debounce(setCommentText), []);
@@ -44,30 +59,8 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
     debouncedSetCommentText(e.target.value);
   };
 
-  const renderComments = useCallback(
-    (
-      comments: CommentWithUser[],
-      parentId: number | null = null,
-      indentation: number = 0,
-    ) => {
-      return comments
-        .filter((comment) => comment.parentCommentId === parentId)
-        .map((comment) => (
-          <div key={comment.id}>
-            <Comment
-              comment={comment}
-              indentation={indentation}
-              postId={post.id}
-            />
-            {renderComments(comments, comment.id, indentation + 20)}
-          </div>
-        ));
-    },
-    [post.id],
-  );
-
   return (
-    <div className="flex w-full flex-col gap-4">
+    <>
       <h1 className="text-2xl font-extrabold">{post.title}</h1>
       <Image
         src={postImg}
@@ -83,14 +76,14 @@ const PostDetail: FC<PostDetailProps> = ({ post, comments }): JSX.Element => {
           className="w-full rounded-lg bg-slate-300 p-4"
           placeholder="Add a comment"
           name="text"
+          value={commentText}
           onChange={handleTextChange}
         />
         <button className="" onClick={handleCommentSubmit}>
           Comment
         </button>
       </div>
-      <div className="flex flex-col gap-1">{renderComments(comments)}</div>
-    </div>
+    </>
   );
 };
 
