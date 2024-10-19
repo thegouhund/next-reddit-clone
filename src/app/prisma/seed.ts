@@ -67,27 +67,27 @@ async function main() {
 
   for (const subbedit of subbedits) {
     for (const user of users) {
-      const posts = await createPosts(5, user.id, subbedit.id);
+      await createPosts(5, user.id, subbedit.id);
 
-      for (const post of posts) {
-        const comments = await createComments(10, user.id, post.id);
+      // for (const post of posts) {
+      //   const comments = await createComments(10, user.id, post.id);
 
-        for (const comment of comments) {
-          const childComments = await createComments(
-            2,
-            user.id,
-            post.id,
-            comment.id,
-          );
+      //   for (const comment of comments) {
+      //     const childComments = await createComments(
+      //       2,
+      //       user.id,
+      //       post.id,
+      //       comment.id,
+      //     );
 
-          for (const childComment of childComments) {
-            await createComments(2, user.id, post.id, childComment.id);
-          }
-        }
+      //     for (const childComment of childComments) {
+      //       await createComments(2, user.id, post.id, childComment.id);
+      //     }
+      //   }
       }
     }
   }
-}
+
 
 main()
   .catch((e) => {
