@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: 'cdn.discordapp.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+        pathname: '**',
+      },
     ],
   },
   typescript: {
