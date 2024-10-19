@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { FC, useState } from "react";
 import CommentInput from "./CommentInput";
+import UpvoteButton from "@/app/components/elements/UpvoteButton";
 
 interface PostDetailProps {
   post: PostWithUserAndSubbedit;
@@ -89,8 +90,10 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }): JSX.Element => {
         className="rounded-lg"
         priority
       />
-      <h3 className="text-base font-medium">{post.body}</h3>
-
+      <p className="font-medium">{post.body}</p>
+      <div className="flex items-center">
+        <UpvoteButton post={post} />
+      </div>
       {isCommentTextAreaOpened ? (
         <CommentInput
           commentText={commentText}
@@ -101,7 +104,7 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }): JSX.Element => {
       ) : (
         <button
           onClick={() => setCommentTextAreaOpened(true)}
-          className="rounded-lg border border-gray-400 px-4 py-2 text-left text-gray-400"
+          className="rounded-lg border border-gray-300 px-4 py-2 text-left text-gray-400"
         >
           Add a comment
         </button>

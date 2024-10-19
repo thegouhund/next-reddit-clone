@@ -8,7 +8,7 @@ export const GET = async (request: NextRequest) => {
   const posts: PostWithUserAndSubbedit[] = await prisma.post.findMany({
     take: limit,
     orderBy: { createdAt: "desc" },
-    include: {Subbedit: true, User: true},
+    include: {Subbedit: true, User: true, Vote: true},
   });
 
   return NextResponse.json(posts, { status: 200 });

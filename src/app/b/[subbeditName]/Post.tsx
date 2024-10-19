@@ -1,10 +1,11 @@
+import UpvoteButton from "@/app/components/elements/UpvoteButton";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
 import postImg from "@public/post-img-example.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { ArrowDownShort, ArrowUpShort, ChatDots } from "react-bootstrap-icons";
+import { ChatDots } from "react-bootstrap-icons";
 
 interface PostProps {
   post: PostWithUserAndSubbedit;
@@ -77,21 +78,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
         />
         <div className="mt-2 flex">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 rounded-lg bg-gray-200 p-1 hover:bg-gray-300">
-              <button
-                onClick={handleUpvote}
-                className="rounded-lg border border-transparent hover:border-gray-400"
-              >
-                <ArrowUpShort size={20} />
-              </button>
-              <p>{upvote}</p>
-              <button
-                onClick={handleDownvote}
-                className="rounded-lg border border-transparent hover:border-gray-400"
-              >
-                <ArrowDownShort size={20} />
-              </button>
-            </div>
+            <UpvoteButton post={post} />
             <div className="flex items-center gap-1 rounded-lg bg-gray-200 px-4 py-1 hover:bg-gray-300">
               <button>
                 <ChatDots size={19} />

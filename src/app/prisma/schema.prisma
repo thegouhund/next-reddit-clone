@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String?        @unique(map: "username") @db.VarChar(255)
-  email        String         @unique(map: "email") @db.VarChar(255)
-  Comment      Comment[]
-  Post         Post[]
-  Subbedits    UserSubbedit[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id        Int            @id @default(autoincrement())
+  username  String?        @unique(map: "username") @db.VarChar(255)
+  email     String         @unique(map: "email") @db.VarChar(255)
+  Comment   Comment[]
+  Post      Post[]
+  Subbedits UserSubbedit[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  Vote      Vote[]
 
   @@map("user")
 }
@@ -59,6 +60,7 @@ model Post {
   Subbedit     Subbedit  @relation(fields: [subbeditId], references: [id], onDelete: Cascade, map: "post_ibfk_2")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  Vote         Vote[]
 
   @@index([subbeditId], map: "subbeditId")
   @@index([userId], map: "user_id_post")
@@ -78,9 +80,24 @@ model Comment {
   other_comment   Comment[] @relation("commentTocomment")
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  Vote            Vote[]
 
   @@index([parentCommentId], map: "parentCommentId")
   @@index([postId], map: "postId")
   @@index([userId], map: "user_id_comment")
   @@map("comment")
+}
+
+model Vote {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  postId    Int?
+  commentId Int?
+  isUpvote  Boolean
+
+  User    User     @relation(fields: [userId], references: [id])
+  Post    Post?    @relation(fields: [postId], references: [id])
+  comment Comment? @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, postId, commentId])
 }

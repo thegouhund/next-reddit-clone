@@ -11,6 +11,7 @@ export async function GET(
       Subbedit: true,
       User: true,
       Comment: { include: { User: true } },
+      Vote: true,
     },
   });
 
