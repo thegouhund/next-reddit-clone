@@ -2,7 +2,7 @@
 
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState, useMemo } from "react";
 import Comment from "./Comment";
 import PostDetail from "./PostDetail";
 
@@ -16,16 +16,16 @@ const CommentPage: FC<CommentPageProps> = ({
   const [post, setPost] = useState<PostWithUserAndSubbedit>();
   const [comments, setComments] = useState<CommentWithUser[]>([]);
 
-  const addComment = (comment: CommentWithUser) => {
+  const addComment = useCallback((comment: CommentWithUser) => {
     setComments((prevComments) => [...prevComments, comment]);
-  };
+  }, []);
 
   const renderComments = useCallback(
     (
       comments: CommentWithUser[],
       parentId: number | null = null,
       indentation: number = 0,
-    ) => {
+    ): JSX.Element[] => {
       return comments
         .filter((comment) => comment.parentCommentId === parentId)
         .map((comment) => (
@@ -40,14 +40,22 @@ const CommentPage: FC<CommentPageProps> = ({
           </div>
         ));
     },
-    [postId],
+    [postId, addComment],
+  );
+  const memoizedComments = useMemo(
+    () => renderComments(comments),
+    [comments, renderComments],
   );
 
   useEffect(() => {
     const fetchPost = async () => {
-      const data = await (
-        await fetch(`/api/subbedit/${subbeditName}/post/${postId}`)
-      ).json();
+      const response = await fetch(
+        `/api/subbedit/${subbeditName}/post/${postId}`,
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch post");
+      }
+      const data = await response.json();
       console.log(data);
       setPost(data);
       setComments(data.Comment);
@@ -58,9 +66,9 @@ const CommentPage: FC<CommentPageProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-2">
         {post && <PostDetail post={post} addComment={addComment} />}
-        <div className="flex flex-col gap-3">{renderComments(comments)}</div>
+        <div className="flex flex-col gap-3">{memoizedComments}</div>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 import useLoginPopup from "@/app/hooks/useLoginPopup";
 import { CommentWithUser } from "@/app/types/comment";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { FC, useState } from "react";
 import { Chat } from "react-bootstrap-icons";
 import ReactMarkdown from "react-markdown";
+import CommentInput from "./CommentInput";
 
 interface CommentProps {
   comment: CommentWithUser;
@@ -58,49 +60,44 @@ const Comment: FC<CommentProps> = ({
     }, 100);
   };
 
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentText(e.target.value);
+  };
+
   return (
     <div
       key={comment.id}
       id={`comment-${comment.id}`}
-      className="relative mb-3 transition-colors rounded"
+      className="relative mb-3 rounded transition-colors"
       style={{ marginLeft: `${indentation}px` }}
     >
-      <div
-        className="absolute bottom-0 left-0 top-0 w-[2px] bg-gray-300"
-        style={{ left: "-10px" }}
-      ></div>
-      <p>u/{comment.User.username}</p>
-      <ReactMarkdown className="prose prose-gray prose-blue">
-        {comment.body}
-      </ReactMarkdown>
-      <button
-        onClick={() => setShowReplyBox(true)}
-        className="text-md mb-2 flex items-center gap-1.5 rounded px-2 py-1 transition-colors hover:bg-gray-300"
-      >
-        <Chat size={20} />
-        reply
-      </button>
-      {showReplyBox && (
-        <>
-          <div className="flex gap-4">
-            <textarea
-              className="w-full resize-y rounded-lg bg-slate-300 p-2"
-              placeholder="Add a comment"
-              name="text"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-end gap-2">
-            <button className="" onClick={() => setShowReplyBox(false)}>
-              Cancel
-            </button>
-            <button className="" onClick={() => handleCommentSubmit()}>
-              Comment
-            </button>
-          </div>
-        </>
-      )}
+      <div className="absolute bottom-0 top-0 w-[2px] bg-gray-300"></div>
+      <div className="ml-2">
+        <Link
+          href={`/u/${comment.User.username}`}
+          className="text-gray-600 hover:text-green-500"
+        >
+          u/{comment.User.username}
+        </Link>
+        <ReactMarkdown className="prose text-black">
+          {comment.body}
+        </ReactMarkdown>
+        <button
+          onClick={() => setShowReplyBox(true)}
+          className="text-md mb-2 flex items-center gap-1.5 rounded px-1 py-1 transition-colors hover:bg-gray-300"
+        >
+          <Chat size={20} />
+          Reply
+        </button>
+        {showReplyBox && (
+          <CommentInput
+            commentText={commentText}
+            handleTextChange={handleTextChange}
+            onCancel={() => setShowReplyBox(false)}
+            onSubmit={handleCommentSubmit}
+          />
+        )}
+      </div>
     </div>
   );
 };

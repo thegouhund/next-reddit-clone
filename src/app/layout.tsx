@@ -36,7 +36,7 @@ export default function RootLayout({
         <body>
           <Navbar />
           <LoginPopup />
-          <main className="flex gap-4 px-8 py-4">
+          <main className="flex gap-4 px-4 py-4">
             {children}
             <Sidebar />
           </main>

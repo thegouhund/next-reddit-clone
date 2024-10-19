@@ -7,7 +7,11 @@ export async function GET(
 ) {
   const post = await prisma.post.findUnique({
     where: { id: parseInt(params.postId, 36) },
-    include: { Subbedit: true, Comment: { include: { User: true } } },
+    include: {
+      Subbedit: true,
+      User: true,
+      Comment: { include: { User: true } },
+    },
   });
 
   if (!post) {
