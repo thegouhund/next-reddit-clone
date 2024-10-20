@@ -10,7 +10,7 @@ export async function GET(
     include: {
       Subbedit: true,
       User: true,
-      Comment: { include: { User: true } },
+      Comment: { include: { User: true, Vote: true } },
       Vote: true,
     },
   });
