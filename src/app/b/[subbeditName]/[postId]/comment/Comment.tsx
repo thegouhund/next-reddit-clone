@@ -6,6 +6,8 @@ import { FC, useState } from "react";
 import { Chat } from "react-bootstrap-icons";
 import ReactMarkdown from "react-markdown";
 import CommentInput from "./CommentInput";
+import UpvoteButton from "@/app/components/elements/UpvoteButton";
+import Image from "next/image";
 
 interface CommentProps {
   comment: CommentWithUser;
@@ -73,30 +75,47 @@ const Comment: FC<CommentProps> = ({
     >
       <div className="absolute bottom-0 top-0 w-[2px] bg-gray-300"></div>
       <div className="ml-2">
-        <Link
-          href={`/u/${comment.User.username}`}
-          className="text-gray-600 hover:text-green-500"
-        >
-          u/{comment.User.username}
-        </Link>
-        <ReactMarkdown className="prose text-black">
-          {comment.body}
-        </ReactMarkdown>
-        <button
-          onClick={() => setShowReplyBox(true)}
-          className="text-md mb-2 flex items-center gap-1.5 rounded px-1 py-1 transition-colors hover:bg-gray-300"
-        >
-          <Chat size={20} />
-          Reply
-        </button>
-        {showReplyBox && (
-          <CommentInput
-            commentText={commentText}
-            handleTextChange={handleTextChange}
-            onCancel={() => setShowReplyBox(false)}
-            onSubmit={handleCommentSubmit}
+        <div className="flex items-start gap-2">
+          <Image
+            className="inline-block rounded-full"
+            src="https://i.pravatar.cc/40"
+            alt="Avatar"
+            width={30}
+            height={30}
           />
-        )}
+          <div className="w-full">
+            <p>
+              <Link
+                href={`/u/${comment.User.username}`}
+                className="text-gray-600 hover:text-green-500"
+              >
+                u/{comment.User.username}
+              </Link>
+              <span className="text-gray-600"> &middot; 8h ago</span>
+            </p>
+            <ReactMarkdown className="prose text-black">
+              {comment.body}
+            </ReactMarkdown>
+            <div className="flex items-center gap-2">
+              <UpvoteButton comment={comment} variant="ghost" />
+              <button
+                onClick={() => setShowReplyBox(true)}
+                className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-gray-300"
+              >
+                <Chat size={18} />
+                Reply
+              </button>
+            </div>
+            {showReplyBox && (
+              <CommentInput
+                commentText={commentText}
+                handleTextChange={handleTextChange}
+                onCancel={() => setShowReplyBox(false)}
+                onSubmit={handleCommentSubmit}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
