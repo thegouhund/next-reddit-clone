@@ -3,6 +3,7 @@ import { Subbedit } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Cake, Globe } from "react-bootstrap-icons";
+import JoinSubbeditButton from "../elements/JoinSubbeditButton";
 
 const Sidebar = () => {
   const [subbedit, setSubbedit] = useState<Subbedit | null>(null);
@@ -16,16 +17,14 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchSubbedit = async () => {
       if (!subbeditName) return;
-      try {
-        const response = await fetch(`/api/subbedit/${subbeditName}`, {
+
+      const data = await (
+        await fetch(`/api/subbedit/${subbeditName}`, {
           cache: "force-cache",
-        });
-        if (!response.ok) throw new Error("Failed to fetch subbedit");
-        const data = await response.json();
-        setSubbedit(data);
-      } catch (error) {
-        console.error("Error fetching subbedit:", error);
-      }
+        })
+      ).json();
+
+      setSubbedit(data);
     };
 
     fetchSubbedit();
@@ -64,9 +63,7 @@ const Sidebar = () => {
               <StatItem label="SomeText" value="100K" />
             </div>
           </div>
-          <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600">
-            Join
-          </button>
+          <JoinSubbeditButton subbeditName={subbedit.name} />
         </div>
       )}
     </aside>

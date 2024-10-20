@@ -7,27 +7,23 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Plus, ThreeDots } from "react-bootstrap-icons";
 import Post from "./Post";
+import JoinSubbeditButton from "@/app/components/elements/JoinSubbeditButton";
 
 function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   const pathName = usePathname();
   const [openedTab, setOpenedTab] = useState(0);
   const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
-  const [isJoined, setIsJoined] = useState<boolean>(true);
-
   const { data: session } = useSession();
+  const [isJoined, setIsJoined] = useState<boolean>(false);
 
-  const handleJoinSubbedit = async () => {
-    const data = await (
-      await fetch(`/api/subbedit/${params.subbeditName}/join`, {
-        method: "POST",
-      })
-    ).json();
-
-    console.log(data);
-    if (data) {
-      setIsJoined(true);
+  useEffect(() => {
+    if (session) {
+      const joined = session.user.subbedits.some(
+        (subbedit) => subbedit.name === params.subbeditName,
+      );
+      setIsJoined(joined);
     }
-  };
+  }, [params.subbeditName, session]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -39,15 +35,6 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
     };
 
     fetchPosts();
-  }, [params.subbeditName, session]);
-
-  useEffect(() => {
-    if (session) {
-      const joined = session.user.subbedits.some(
-        (subbedit) => subbedit.name === params.subbeditName,
-      );
-      setIsJoined(joined);
-    }
   }, [params.subbeditName, session]);
 
   return (
@@ -70,11 +57,10 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
               </button>
             </div>
           ) : (
-            <button onClick={handleJoinSubbedit}>
-              <p className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
-                + Join
-              </p>
-            </button>
+            <JoinSubbeditButton
+              subbeditName={params.subbeditName}
+              onJoined={() => setIsJoined(true)}
+            />
           )}
         </div>
 
