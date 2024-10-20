@@ -2,29 +2,6 @@ import { auth } from "@/app/auth";
 import prisma from "@/app/config/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { postId: string } },
-) {
-  const upvoteCount = await prisma.vote.count({
-    where: {
-      postId: parseInt(params.postId),
-      isUpvote: true,
-    },
-  });
-
-  const downvoteCount = await prisma.vote.count({
-    where: {
-      postId: parseInt(params.postId),
-      isUpvote: false,
-    },
-  });
-
-  const voteScore = upvoteCount - downvoteCount;
-
-  return NextResponse.json({ upvoteCount, downvoteCount, voteScore });
-}
-
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
   const session = await auth();
@@ -41,7 +18,7 @@ export const POST = async (request: NextRequest) => {
     },
   });
 
-  if (existingVote?.isUpvote && !body.isUpvote) {
+  if (existingVote) {
     const vote = await prisma.vote.updateMany({
       where: {
         userId: parseInt(session.user.id),

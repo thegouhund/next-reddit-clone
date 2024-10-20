@@ -4,7 +4,7 @@ import postImg from "@public/post-img-example.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { ChatDots } from "react-bootstrap-icons";
 
 interface PostProps {
@@ -14,16 +14,7 @@ interface PostProps {
 }
 
 const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
-  const [upvote, setUpvote] = useState<number>(post.upvote || 0);
   const router = useRouter();
-
-  const handleUpvote = () => {
-    setUpvote(upvote + 1);
-  };
-
-  const handleDownvote = () => {
-    setUpvote(upvote - 1);
-  };
 
   return (
     <article
