@@ -47,11 +47,5 @@ export async function POST(
     },
   });
 
-  const members = await prisma.userSubbedit.findMany({
-    where: { subbeditId: subbedit.id },
-  });
-
-  console.log(members);
-
   return NextResponse.json(joinSubbedit, { status: 201 });
 }

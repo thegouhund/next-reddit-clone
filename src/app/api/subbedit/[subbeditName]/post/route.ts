@@ -10,7 +10,7 @@ export async function GET(
     where: { name: params.subbeditName },
     include: {
       Post: {
-        include: { User: true, Subbedit: true },
+        include: { User: true, Subbedit: true, Vote: true },
         orderBy: { createdAt: "desc" },
       },
     },
