@@ -1,14 +1,14 @@
+import useLoginPopup from "@/app/hooks/useLoginPopup";
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import { Vote as VoteType } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ArrowDownShort, ArrowUpShort } from "react-bootstrap-icons";
 
 interface UpvoteButtonProps {
-  post?: PostWithUserAndSubbedit & { Vote: VoteType[] };
-  comment?: CommentWithUser & { Vote: VoteType[] };
-  variant: "ghost" | "normal";
+  post?: PostWithUserAndSubbedit;
+  comment?: CommentWithUser;
+  variant?: "ghost" | "normal";
 }
 
 const UpvoteButton: React.FC<UpvoteButtonProps> = ({
@@ -16,6 +16,7 @@ const UpvoteButton: React.FC<UpvoteButtonProps> = ({
   comment,
   variant = "normal",
 }) => {
+  const { openLoginPopup } = useLoginPopup();
   const [voteState, setVoteState] = useState({
     upvote: (post?.Vote ?? comment?.Vote ?? []).reduce(
       (total, vote) => total + (vote.isUpvote ? 1 : -1),
@@ -41,6 +42,8 @@ const UpvoteButton: React.FC<UpvoteButtonProps> = ({
 
   const handleVote = useCallback(
     async (isUpvote: boolean) => {
+      if (!session) return openLoginPopup();
+
       const { isUpvoted, isDownvoted } = voteState;
       const currentVote = isUpvote ? isUpvoted : isDownvoted;
 
@@ -74,7 +77,7 @@ const UpvoteButton: React.FC<UpvoteButtonProps> = ({
         }));
       }
     },
-    [comment?.id, voteState, post],
+    [session, openLoginPopup, voteState, post, comment?.id],
   );
 
   return (
