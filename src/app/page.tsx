@@ -25,11 +25,9 @@ export default function Home() {
   return (
     <div className="w-full">
       <h2>Most Recent Posts: </h2>
-      <div className="flex flex-col gap-4">
         {posts.map((post) => {
           return <Post post={post} key={post.id} withSubbedit />;
         })}
-      </div>
     </div>
   );
 }

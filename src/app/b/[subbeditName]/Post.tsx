@@ -1,6 +1,5 @@
 import UpvoteButton from "@/app/components/elements/UpvoteButton";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import postImg from "@public/post-img-example.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,7 +38,7 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
             href={`/b/${post.Subbedit.name}`}
             className="text-sm font-semibold text-gray-600 hover:text-green-500"
           >
-            from b/{post.Subbedit.name}{" "}
+            from b/{post.Subbedit.name}
             <span className="hover: text-gray-600">
               &middot; {strToReadable(post.createdAt.toString())} ago
             </span>
@@ -53,29 +52,41 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
           <h3 className="text-xl font-bold hover:underline">{post.title}</h3>
         </Link>
         <div className="mb-2 flex gap-2">
-          <span className="rounded-full bg-yellow-300 px-2 text-sm text-black">
+          <span className="rounded-full bg-yellow-300 px-2 text-xs text-black">
             Tech
           </span>
-          <span className="rounded-full bg-blue-400 px-2 text-sm text-black">
+          <span className="rounded-full bg-blue-400 px-2 text-xs text-black">
             React
           </span>
         </div>
-        <Image
-          src={postImg}
-          alt="Image Post"
-          width={600}
-          height={400}
-          className="rounded-lg"
-        />
+        <p className="text-sm text-gray-700">
+          {post.body.length > 200 ? `${post.body.slice(0, 200)}...` : post.body}
+        </p>
+        {post.mediaUrl && (
+          <Link
+            href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
+          >
+            <Image
+              src={post.mediaUrl}
+              alt="Image Post"
+              width={600}
+              height={400}
+              className="rounded-lg"
+            />
+          </Link>
+        )}
         <div className="mt-2 flex">
           <div className="flex items-center gap-4">
             <UpvoteButton post={post} />
-            <div className="flex items-center gap-1 rounded-lg bg-gray-200 px-4 py-1 hover:bg-gray-300">
+            <Link
+              href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
+              className="flex items-center gap-1 rounded-lg bg-gray-200 px-4 py-1 hover:bg-gray-300"
+            >
               <button>
                 <ChatDots size={19} />
               </button>
               <p>{post.commentCount}</p>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

@@ -19,6 +19,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         className="w-full rounded-lg border border-gray-700 p-4 focus:outline-none"
         placeholder="Add a comment"
         name="text"
+        autoFocus
         value={commentText}
         onChange={handleTextChange}
       />

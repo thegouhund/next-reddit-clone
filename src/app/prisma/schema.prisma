@@ -53,6 +53,7 @@ model Post {
   body         String    @db.Text
   upvote       Int?      @default(0)
   commentCount Int?      @default(0)
+  mediaUrl     String?
   userId       Int
   subbeditId   Int
   Comment      Comment[]

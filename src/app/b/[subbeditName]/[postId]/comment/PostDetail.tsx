@@ -1,14 +1,14 @@
 "use client";
 
+import UpvoteButton from "@/app/components/elements/UpvoteButton";
 import useLoginPopup from "@/app/hooks/useLoginPopup";
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import postImg from "@public/post-img-example.png";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { FC, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import CommentInput from "./CommentInput";
-import UpvoteButton from "@/app/components/elements/UpvoteButton";
 
 interface PostDetailProps {
   post: PostWithUserAndSubbedit;
@@ -83,14 +83,18 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }): JSX.Element => {
       </div>
 
       <h1 className="text-2xl font-extrabold">{post.title}</h1>
-      <Image
-        src={postImg}
-        alt="Image Post"
-        width={600}
-        className="rounded-lg"
-        priority
-      />
-      <p className="font-medium">{post.body}</p>
+      {post.mediaUrl && (
+        <Image
+          src={post.mediaUrl}
+          alt="Image Post"
+          width={600}
+          height={400}
+          className="rounded-lg"
+        />
+      )}
+      <ReactMarkdown className="prose min-w-full text-black prose-headings:m-0 prose-headings:p-0 prose-headings:underline prose-p:m-0 prose-a:text-blue-600 prose-blockquote:m-0 prose-ol:m-0 prose-ul:m-0 prose-li:m-0 prose-table:m-0 prose-img:m-0 prose-img:rounded-lg prose-hr:m-0">
+        {post.body}
+      </ReactMarkdown>
       <div className="flex items-center">
         <UpvoteButton post={post} />
       </div>

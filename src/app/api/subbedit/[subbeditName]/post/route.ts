@@ -1,5 +1,6 @@
 import { auth } from "@/app/auth";
 import prisma from "@/app/config/db";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -37,13 +38,6 @@ export const POST = async (
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  if (!body.body) {
-    return NextResponse.json(
-      { message: "Post body is required" },
-      { status: 400 },
-    );
-  }
-
   const subbedit = await prisma.subbedit.findUnique({
     where: { name: params.subbeditName },
     select: { id: true },
@@ -56,12 +50,16 @@ export const POST = async (
     );
   }
 
+  const postData: Prisma.PostCreateInput = {
+    title: body.title,
+    body: body.body,
+    mediaUrl: body.mediaUrl,
+    User: { connect: { id: parseInt(session.user.id) } },
+    Subbedit: { connect: { id: subbedit.id } },
+  };
+
   const post = await prisma.post.create({
-    data: {
-      ...body,
-      userId: session.user.id,
-      subbeditId: subbedit.id,
-    }
+    data: postData,
   });
 
   return NextResponse.json(post, { status: 201 });
