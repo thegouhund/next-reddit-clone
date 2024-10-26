@@ -5,8 +5,10 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { subbeditName: string } },
 ) {
+  const { subbeditName } = await params;
+  
   const subbedit = await prisma.subbedit.findUnique({
-    where: { name: params.subbeditName },
+    where: { name: subbeditName },
   });
   return NextResponse.json(subbedit, { status: 200 });
 }

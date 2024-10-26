@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: "My Reddit clone",
 };
 
+export const fetchCache = "force-cache"
+
 export default function RootLayout({
   children,
 }: Readonly<{

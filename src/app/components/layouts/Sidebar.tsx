@@ -19,9 +19,7 @@ const Sidebar = () => {
       if (!subbeditName) return;
 
       const data = await (
-        await fetch(`/api/subbedit/${subbeditName}`, {
-          cache: "force-cache",
-        })
+        await fetch(`/api/subbedit/${subbeditName}`)
       ).json();
 
       setSubbedit(data);

@@ -4,12 +4,15 @@ import { PostWithUserAndSubbedit } from "@/app/types/post";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Plus, ThreeDots } from "react-bootstrap-icons";
 import Post from "./Post";
 import JoinSubbeditButton from "@/app/components/elements/JoinSubbeditButton";
 
-function SubbeditPage({ params }: { params: { subbeditName: string } }) {
+type Params = Promise<{ subbeditName: string }>;
+
+function SubbeditPage({ params }: { params: Params }) {
+  const { subbeditName } = use(params);
   const pathName = usePathname();
   const [openedTab, setOpenedTab] = useState(0);
   const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
@@ -19,35 +22,35 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
   useEffect(() => {
     if (session) {
       const joined = session.user.subbedits.some(
-        (subbedit) => subbedit.name === params.subbeditName,
+        (subbedit) => subbedit.name === subbeditName,
       );
       setIsJoined(joined);
     }
-  }, [params.subbeditName, session]);
+  }, [subbeditName, session]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await (
-        await fetch(`/api/subbedit/${params.subbeditName}/post`)
+        await fetch(`/api/subbedit/${subbeditName}/post`)
       ).json();
       console.log(data);
       setPosts(data);
     };
 
     fetchPosts();
-  }, [params.subbeditName, session]);
+  }, [subbeditName, session]);
 
   return (
     <>
       <div className="w-full">
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl">b/{params.subbeditName}</h2>
+          <h2 className="text-3xl">b/{subbeditName}</h2>
           {isJoined ? (
             <div className="flex items-center gap-4">
               <Link href={pathName + "/new"}>
                 <button className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
                   <div className="flex items-center gap-1">
-                    <Plus size={24} />
+                    <Plus color="white" size={24} />
                     Create New Post
                   </div>
                 </button>
@@ -58,7 +61,7 @@ function SubbeditPage({ params }: { params: { subbeditName: string } }) {
             </div>
           ) : (
             <JoinSubbeditButton
-              subbeditName={params.subbeditName}
+              subbeditName={subbeditName}
               onJoined={() => setIsJoined(true)}
             />
           )}

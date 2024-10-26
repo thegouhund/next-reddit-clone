@@ -7,6 +7,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { subbeditName: string; postId: string } },
 ) {
+  const { subbeditName, postId } = await params;
   const session = await auth();
   const body = await request.json();
 
@@ -22,7 +23,7 @@ export async function POST(
   }
 
   const subbedit = await prisma.subbedit.findUnique({
-    where: { name: params.subbeditName },
+    where: { name: subbeditName },
     select: { id: true },
   });
 
@@ -36,7 +37,7 @@ export async function POST(
   const commentData: Prisma.CommentUncheckedCreateInput = {
     body: body.body,
     userId: parseInt(session.user.id),
-    postId: parseInt(params.postId),
+    postId: parseInt(postId),
   };
 
   const comment = await prisma.comment.create({

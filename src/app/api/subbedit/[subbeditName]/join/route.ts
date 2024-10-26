@@ -6,6 +6,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { subbeditName: string } },
 ) {
+  const { subbeditName } = await params;
   const session = await auth();
 
   if (!session) {
@@ -13,7 +14,7 @@ export async function POST(
   }
 
   const subbedit = await prisma.subbedit.findUnique({
-    where: { name: params.subbeditName },
+    where: { name: subbeditName },
   });
 
   if (!subbedit) {

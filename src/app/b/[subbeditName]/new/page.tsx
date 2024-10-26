@@ -4,10 +4,14 @@ import { OurFileRouter } from "@/app/api/uploadthing/core";
 import MDEditor from "@uiw/react-md-editor";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { use, useCallback, useState } from "react";
 import { generateUploadButton } from "@uploadthing/react";
 
-const FormNewPost = ({ params }: { params: { subbeditName: string } }) => {
+type Params = Promise<{ subbeditName: string }>;
+
+const FormNewPost = ({ params }: { params: Params }) => {
+  const { subbeditName } = use(params);
+
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -32,7 +36,7 @@ const FormNewPost = ({ params }: { params: { subbeditName: string } }) => {
     }
 
     const data = await (
-      await fetch(`/api/subbedit/${params.subbeditName}/post`, {
+      await fetch(`/api/subbedit/${subbeditName}/post`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +66,7 @@ const FormNewPost = ({ params }: { params: { subbeditName: string } }) => {
 
   return (
     <div className="w-full">
-      <p>Create a new post at b/{params.subbeditName}</p>
+      <p>Create a new post at b/{subbeditName}</p>
       <div className="flex gap-2">
         <button
           onClick={() => {

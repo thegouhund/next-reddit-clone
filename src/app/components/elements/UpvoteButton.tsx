@@ -86,16 +86,22 @@ const UpvoteButton: React.FC<UpvoteButtonProps> = ({
     >
       <button
         onClick={() => handleVote(true)}
-        className={`${voteState.isUpvoted ? "text-blue-500" : ""} rounded-lg border border-transparent hover:border-gray-400 hover:text-blue-500`}
+        className={`rounded-lg border border-transparent hover:border-gray-400 hover:text-blue-500`}
       >
-        <ArrowUpShort size={20} />
+        <ArrowUpShort
+          color={voteState.isUpvoted ? "#3b82f6" : "black"}
+          size={20}
+        />
       </button>
       <p>{voteState.upvote}</p>
       <button
         onClick={() => handleVote(false)}
-        className={`${voteState.isDownvoted ? "text-red-500" : ""} rounded-lg border border-transparent p-0 hover:border-gray-400 hover:text-red-500`}
+        className={`rounded-lg border border-transparent p-0 hover:border-gray-400 hover:text-red-500`}
       >
-        <ArrowDownShort size={20} />
+        <ArrowDownShort
+          color={voteState.isDownvoted ? "#ef4444" : "black"}
+          size={20}
+        />
       </button>
     </div>
   );

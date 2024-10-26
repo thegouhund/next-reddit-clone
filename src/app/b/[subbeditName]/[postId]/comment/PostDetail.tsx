@@ -15,7 +15,7 @@ interface PostDetailProps {
   addComment: (comment: CommentWithUser) => void;
 }
 
-const PostDetail: FC<PostDetailProps> = ({ post, addComment }): JSX.Element => {
+const PostDetail: FC<PostDetailProps> = ({ post, addComment }) => {
   const [commentText, setCommentText] = useState("");
   const { data: session } = useSession();
   const { openLoginPopup } = useLoginPopup();

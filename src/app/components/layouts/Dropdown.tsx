@@ -19,7 +19,7 @@ const Dropdown = ({
         onClick={() => setIsOpen(false)}
         className="flex w-full items-center gap-1 px-4 py-2 text-left text-gray-600 hover:bg-gray-100"
       >
-        <Gear />
+        <Gear size={20} />
         Settings
       </button>
       <hr />
@@ -30,7 +30,7 @@ const Dropdown = ({
         }}
         className="flex w-full items-center gap-1 px-4 py-2 text-left text-gray-600 hover:bg-gray-100"
       >
-        <BoxArrowInLeft />
+        <BoxArrowInLeft size={20} />
         Logout
       </button>
     </div>

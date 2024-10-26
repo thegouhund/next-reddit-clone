@@ -2,17 +2,14 @@
 
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import { FC, useCallback, useEffect, useState, useMemo } from "react";
+import { JSX, use, useCallback, useEffect, useMemo, useState } from "react";
 import Comment from "./Comment";
 import PostDetail from "./PostDetail";
 
-interface CommentPageProps {
-  params: { subbeditName: string; postId: number };
-}
+type Params = Promise<{ subbeditName: string; postId: number }>;
 
-const CommentPage: FC<CommentPageProps> = ({
-  params: { subbeditName, postId },
-}) => {
+const CommentPage = ({ params }: { params: Params }) => {
+  const { subbeditName, postId } = use(params);
   const [post, setPost] = useState<PostWithUserAndSubbedit>();
   const [comments, setComments] = useState<CommentWithUser[]>([]);
 

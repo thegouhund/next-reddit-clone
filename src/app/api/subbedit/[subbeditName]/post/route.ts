@@ -7,8 +7,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { subbeditName: string } },
 ) {
+  const { subbeditName } = await params;
   const subbeditWithPosts = await prisma.subbedit.findUnique({
-    where: { name: params.subbeditName },
+    where: { name: subbeditName },
     include: {
       Post: {
         include: { User: true, Subbedit: true, Vote: true },
@@ -31,6 +32,7 @@ export const POST = async (
   request: NextRequest,
   { params }: { params: { subbeditName: string } },
 ) => {
+  const { subbeditName } = await params;
   const session = await auth();
   const body = await request.json();
 
@@ -39,7 +41,7 @@ export const POST = async (
   }
 
   const subbedit = await prisma.subbedit.findUnique({
-    where: { name: params.subbeditName },
+    where: { name: subbeditName },
     select: { id: true },
   });
 
