@@ -1,6 +1,7 @@
 import { signOut } from "next-auth/react";
 import React, { Dispatch, SetStateAction } from "react";
 import { BoxArrowInLeft, Gear } from "react-bootstrap-icons";
+import DropdownItem from "./DropdownItem";
 
 const Dropdown = ({
   isOpen,
@@ -15,24 +16,20 @@ const Dropdown = ({
         isOpen ? "max-h-40" : "max-h-0 border-none"
       }`}
     >
-      <button
+      <DropdownItem
         onClick={() => setIsOpen(false)}
-        className="flex w-full items-center gap-1 px-4 py-2 text-left text-gray-600 hover:bg-gray-100"
-      >
-        <Gear size={20} />
-        Settings
-      </button>
+        text="Settings"
+        icon={<Gear size={20} />}
+      />
       <hr />
-      <button
+      <DropdownItem
         onClick={() => {
           signOut();
           setIsOpen(false);
         }}
-        className="flex w-full items-center gap-1 px-4 py-2 text-left text-gray-600 hover:bg-gray-100"
-      >
-        <BoxArrowInLeft size={20} />
-        Logout
-      </button>
+        text="Logout"
+        icon={<BoxArrowInLeft size={20} />}
+      ></DropdownItem>
     </div>
   );
 };

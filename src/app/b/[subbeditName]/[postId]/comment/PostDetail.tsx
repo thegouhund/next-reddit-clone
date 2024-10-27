@@ -9,6 +9,7 @@ import Image from "next/image";
 import React, { FC, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import CommentInput from "./CommentInput";
+import Link from "next/link";
 
 interface PostDetailProps {
   post: PostWithUserAndSubbedit;
@@ -74,10 +75,10 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }) => {
           height={40}
         />
         <div>
-          <p>
+          <Link href={`/b/${post.Subbedit.name}`}>
             <span className="font-bold">b/{post.Subbedit.name}</span> &middot;
             3d ago
-          </p>
+          </Link>
           <p className="-mt-1 text-sm">{post.User.username}</p>
         </div>
       </div>
