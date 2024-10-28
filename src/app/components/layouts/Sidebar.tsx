@@ -4,34 +4,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Cake, Globe } from "react-bootstrap-icons";
 import JoinSubbeditButton from "../elements/JoinSubbeditButton";
+import useSubbedit from "@/app/hooks/useSubbedit";
 
 const Sidebar = () => {
-  const [subbedit, setSubbedit] = useState<Subbedit | null>(null);
-  const pathname = usePathname();
-  const subbeditName = useMemo(() => {
-    return (
-      pathname.match(/\/b\/([^\/]+)(?:\/[a-z0-9]+(?:\/.*)?)?/)?.[1] || null
-    );
-  }, [pathname]);
-
-  useEffect(() => {
-    const fetchSubbedit = async () => {
-      if (!subbeditName) return;
-
-      const data = await (
-        await fetch(`/api/subbedit/${subbeditName}`, {cache: "force-cache" })
-      ).json();
-
-      setSubbedit(data);
-    };
-
-    fetchSubbedit();
-  }, [subbeditName]);
+  const { subbedit } = useSubbedit();
 
   return (
     <aside className="sticky top-4 h-[calc(95vh-4rem)] w-[350px] overflow-y-auto rounded border border-gray-400 p-4 max-[900px]:hidden">
-      {!subbeditName && <div>Welcome to beddit!!</div>}
-      {subbeditName && !subbedit && (
+      {!subbedit?.name && <div>Welcome to beddit!!</div>}
+      {subbedit?.name && !subbedit && (
         <div className="flex w-full animate-pulse flex-col gap-4">
           {[...Array(5)].map((_, index) => (
             <div

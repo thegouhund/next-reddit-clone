@@ -1,8 +1,6 @@
 import { auth } from "@/app/auth";
 import prisma from "@/app/config/db";
-import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { subbeditName: string } },
@@ -12,7 +10,7 @@ export async function GET(
     where: { name: subbeditName },
     include: {
       Post: {
-        include: { User: true, Subbedit: true, Vote: true },
+        include: { User: true, Subbedit: true, Vote: true, Flair: true },
         orderBy: { createdAt: "desc" },
       },
     },
@@ -52,16 +50,15 @@ export const POST = async (
     );
   }
 
-  const postData: Prisma.PostCreateInput = {
-    title: body.title,
-    body: body.body,
-    mediaUrl: body.mediaUrl,
-    User: { connect: { id: parseInt(session.user.id) } },
-    Subbedit: { connect: { id: subbedit.id } },
-  };
-
   const post = await prisma.post.create({
-    data: postData,
+    data: {
+      title: body.title,
+      body: body.body,
+      mediaUrl: body.mediaUrl,
+      userId: parseInt(session.user.id),
+      subbeditId: subbedit.id,
+      flairId: parseInt(body.flairId),
+    },
   });
 
   return NextResponse.json(post, { status: 201 });

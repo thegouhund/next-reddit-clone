@@ -29,6 +29,7 @@ model Subbedit {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   Users     UserSubbedit[]
+  Flair     Flair[]
 
   @@map("subbedit")
 }
@@ -48,23 +49,27 @@ model UserSubbedit {
 }
 
 model Post {
-  id           Int       @id @default(autoincrement())
-  title        String    @db.VarChar(255)
-  body         String    @db.Text
-  upvote       Int?      @default(0)
-  commentCount Int?      @default(0)
+  id           Int     @id @default(autoincrement())
+  title        String  @db.VarChar(255)
+  body         String  @db.Text
+  upvote       Int?    @default(0)
+  commentCount Int?    @default(0)
   mediaUrl     String?
   userId       Int
   subbeditId   Int
-  Comment      Comment[]
-  User         User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "post_ibfk_1")
-  Subbedit     Subbedit  @relation(fields: [subbeditId], references: [id], onDelete: Cascade, map: "post_ibfk_2")
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  Vote         Vote[]
+  flairId      Int?
+
+  Flair     Flair?    @relation(fields: [flairId], references: [id])
+  Comment   Comment[]
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "post_ibfk_1")
+  Subbedit  Subbedit  @relation(fields: [subbeditId], references: [id], onDelete: Cascade, map: "post_ibfk_2")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Vote      Vote[]
 
   @@index([subbeditId], map: "subbeditId")
   @@index([userId], map: "user_id_post")
+  @@index([flairId])
   @@map("post")
 }
 
@@ -101,4 +106,16 @@ model Vote {
   comment Comment? @relation(fields: [commentId], references: [id])
 
   @@unique([userId, postId, commentId])
+}
+
+model Flair {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String @db.Text
+  color       String @db.VarChar(7)
+  subbeditId  Int
+
+  subreddit Subbedit @relation(fields: [subbeditId], references: [id])
+  createdAt DateTime @default(now())
+  Post      Post[]
 }

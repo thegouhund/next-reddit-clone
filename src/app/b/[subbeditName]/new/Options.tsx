@@ -1,10 +1,11 @@
+import useSubbedit from "@/app/hooks/useSubbedit";
 import React from "react";
 
 interface OptionsProps {
   selectedPostType: "text" | "media";
   setSelectedPostType: (type: "text" | "media") => void;
-  selectedFlair: string;
-  setSelectedFlair: (flair: string) => void;
+  selectedFlair: string | null;
+  setSelectedFlair: (flair: string | null) => void;
   setMediaUrl: (url: string | null) => void;
 }
 
@@ -15,6 +16,8 @@ const Options: React.FC<OptionsProps> = ({
   setSelectedFlair,
   setSelectedPostType,
 }) => {
+  const { subbedit } = useSubbedit();
+
   return (
     <div className="flex gap-2">
       <button
@@ -32,20 +35,23 @@ const Options: React.FC<OptionsProps> = ({
       >
         Media
       </button>
-      <div className="">
+      {subbedit?.Flair && subbedit.Flair.length > 0 && (
         <select
           className="rounded border bg-transparent px-2 py-1"
-          value={selectedFlair}
-          onChange={(e) => setSelectedFlair(e.target.value)}
+          value={selectedFlair || ""}
+          onChange={(e) => setSelectedFlair(e.target.value || null)}
         >
           <option value="" disabled>
             Choose a flair
           </option>
-          <option value="Help">Help</option>
-          <option value="Humour">Humour</option>
-          <option value="Text">Text</option>
+          <option value="">No flair</option>
+          {subbedit.Flair.map((flair, i) => (
+            <option key={i} value={flair.id}>
+              {flair.name}
+            </option>
+          ))}
         </select>
-      </div>
+      )}
     </div>
   );
 };

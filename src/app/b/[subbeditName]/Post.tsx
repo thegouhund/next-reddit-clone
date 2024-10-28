@@ -12,7 +12,7 @@ interface PostProps {
   withSubbedit?: boolean;
 }
 
-const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
+const Post: FC<PostProps> = ({ post, withUser, withSubbedit }) => {
   const router = useRouter();
 
   return (
@@ -51,14 +51,16 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }): JSX.Element => {
         >
           <h3 className="text-xl font-bold hover:underline">{post.title}</h3>
         </Link>
-        <div className="mb-2 flex gap-2">
-          <span className="rounded-full bg-yellow-300 px-2 text-xs text-black">
-            Tech
-          </span>
-          <span className="rounded-full bg-blue-400 px-2 text-xs text-black">
-            React
-          </span>
-        </div>
+        {post.Flair && (
+          <div className="mb-2 flex gap-2">
+            <span
+              className={`rounded-full px-2 text-xs text-black`}
+              style={{ backgroundColor: post.Flair.color }}
+            >
+              {post.Flair.name}
+            </span>
+          </div>
+        )}
         <p className="text-sm text-gray-700">
           {post.body.length > 200 ? `${post.body.slice(0, 200)}...` : post.body}
         </p>

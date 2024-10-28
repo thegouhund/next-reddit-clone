@@ -13,6 +13,7 @@ export async function GET(
       User: true,
       Comment: { include: { User: true, Vote: true } },
       Vote: true,
+      Flair: true
     },
   });
 

@@ -6,9 +6,12 @@ export async function GET(
   { params }: { params: { subbeditName: string } },
 ) {
   const { subbeditName } = await params;
-  
+
   const subbedit = await prisma.subbedit.findUnique({
     where: { name: subbeditName },
+    include: {
+      Flair: true,
+    },
   });
   return NextResponse.json(subbedit, { status: 200 });
 }

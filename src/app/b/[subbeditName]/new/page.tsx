@@ -11,7 +11,7 @@ type Params = Promise<{ subbeditName: string }>;
 const FormNewPost = ({ params }: { params: Params }) => {
   const { subbeditName } = use(params);
   const router = useRouter();
-  
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const { data: session } = useSession();
@@ -19,7 +19,7 @@ const FormNewPost = ({ params }: { params: Params }) => {
     "text",
   );
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
-  const [selectedFlair, setSelectedFlair] = useState<string>("");
+  const [selectedFlair, setSelectedFlair] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +43,7 @@ const FormNewPost = ({ params }: { params: Params }) => {
           title,
           body: content,
           mediaUrl: mediaUrl,
+          flairId: selectedFlair,
         }),
       })
     ).json();

@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import type { Subbedit } from "@prisma/client";
 import { create } from "zustand";
+import { SubbeditWithFlair } from "../types/subbedit";
 
 interface SubbeditState {
-  subbedit: Subbedit | null;
-  setSubbedit: (subbedit: Subbedit | null) => void;
+  subbedit: SubbeditWithFlair | null;
+  setSubbedit: (subbedit: SubbeditWithFlair | null) => void;
 }
 
 const useSubbedit = create<SubbeditState>()((set) => ({
   subbedit: null,
-  setSubbedit: (value: Subbedit | null) => set({ subbedit: value }),
+  setSubbedit: (value: SubbeditWithFlair | null) => set({ subbedit: value }),
 }));
 
 export default useSubbedit;
