@@ -34,11 +34,18 @@ model Subbedit {
   @@map("subbedit")
 }
 
+enum Role {
+  CREATOR
+  MODERATOR
+  MEMBER
+}
+
 model UserSubbedit {
   id         Int      @id @default(autoincrement())
   userId     Int
   subbeditId Int
   joinedAt   DateTime @default(now())
+  role       Role     @default(MEMBER)
 
   User     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Subbedit Subbedit @relation(fields: [subbeditId], references: [id], onDelete: Cascade)

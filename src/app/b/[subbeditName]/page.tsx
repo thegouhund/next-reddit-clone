@@ -55,9 +55,9 @@ function SubbeditPage({ params }: { params: Params }) {
                   </div>
                 </button>
               </Link>
-              <button className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+              <Link href={pathName + "/setting"} className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
                 <ThreeDots color="white" size={24} />
-              </button>
+              </Link>
             </div>
           ) : (
             <JoinSubbeditButton

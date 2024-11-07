@@ -24,7 +24,7 @@ const JoinSubbeditButton: React.FC<JoinSubbeditButtonProps> = ({
 
   const handleJoinSubbedit = async () => {
     const data = await (
-      await fetch(`/api/subbedit/${subbeditName}/join`, {
+      await fetch(`/api/subbedit/${subbeditName}/member`, {
         method: "POST",
       })
     ).json();
