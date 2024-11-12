@@ -1,8 +1,10 @@
 "use client";
 
+import Skeleton from "@/app/components/elements/Skeleton";
 import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
-import { JSX, use, useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { JSX, use, useCallback, useMemo, useState } from "react";
 import Comment from "./Comment";
 import PostDetail from "./PostDetail";
 
@@ -10,7 +12,7 @@ type Params = Promise<{ subbeditName: string; postId: number }>;
 
 const CommentPage = ({ params }: { params: Params }) => {
   const { subbeditName, postId } = use(params);
-  const [post, setPost] = useState<PostWithUserAndSubbedit>();
+  // const [post, setPost] = useState<PostWithUserAndSubbedit>();
   const [comments, setComments] = useState<CommentWithUser[]>([]);
 
   const addComment = useCallback((comment: CommentWithUser) => {
@@ -44,22 +46,32 @@ const CommentPage = ({ params }: { params: Params }) => {
     [comments, renderComments],
   );
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const response = await fetch(
-        `/api/subbedit/${subbeditName}/post/${postId}`,
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch post");
-      }
-      const data = await response.json();
-      console.log(data);
-      setPost(data);
-      setComments(data.Comment);
-    };
+  const { data: post, isLoading } = useQuery<PostWithUserAndSubbedit>({
+    queryFn: () =>
+      fetch(`/api/subbedit/${subbeditName}/post/${postId}`).then((res) =>
+        res.json(),
+      ),
+    queryKey: ["subbeditPosts"],
+  });
 
-    fetchPost();
-  }, [subbeditName, postId]);
+  if (isLoading) {
+    return (
+      <div className="flex w-full flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <Skeleton width={40} height={40} isRound />
+          <Skeleton width={80} />
+        </div>
+        <div className="flex w-full flex-col gap-2">
+          <Skeleton />
+          <Skeleton width={"80%"} />
+          <br />
+          <Skeleton width={"90%"} />
+          <Skeleton width={"90%"} />
+          <Skeleton width={"90%"} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -70,5 +82,4 @@ const CommentPage = ({ params }: { params: Params }) => {
     </div>
   );
 };
-
 export default CommentPage;

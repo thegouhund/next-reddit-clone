@@ -1,13 +1,15 @@
 "use client";
 
+import JoinSubbeditButton from "@/app/components/elements/JoinSubbeditButton";
+import Skeleton from "@/app/components/elements/Skeleton";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { Plus, ThreeDots } from "react-bootstrap-icons";
 import Post from "./Post";
-import JoinSubbeditButton from "@/app/components/elements/JoinSubbeditButton";
 
 type Params = Promise<{ subbeditName: string }>;
 
@@ -15,7 +17,6 @@ function SubbeditPage({ params }: { params: Params }) {
   const { subbeditName } = use(params);
   const pathName = usePathname();
   const [openedTab, setOpenedTab] = useState(0);
-  const [posts, setPosts] = useState<PostWithUserAndSubbedit[]>([]);
   const { data: session } = useSession();
   const [isJoined, setIsJoined] = useState<boolean>(false);
 
@@ -28,17 +29,30 @@ function SubbeditPage({ params }: { params: Params }) {
     }
   }, [subbeditName, session]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await (
-        await fetch(`/api/subbedit/${subbeditName}/post`)
-      ).json();
-      console.log(data);
-      setPosts(data);
-    };
+  const { data: posts, isLoading } = useQuery<PostWithUserAndSubbedit[]>({
+    queryFn: () =>
+      fetch(`/api/subbedit/${subbeditName}/post`).then((res) => res.json()),
+    queryKey: ["posts"],
+  });
 
-    fetchPosts();
-  }, [subbeditName, session]);
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <h2 className="text-3xl">b/{subbeditName}</h2>
+        <h3 className="text-2xl">Recent Posts: </h3>
+        <div className="w-full">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="flex flex-col gap-2 mb-4 rounded border border-gray-400 p-4">
+              <Skeleton width={80} />
+              <Skeleton />
+              <Skeleton width="80%" />
+              <Skeleton height={400} width="50%" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -55,7 +69,10 @@ function SubbeditPage({ params }: { params: Params }) {
                   </div>
                 </button>
               </Link>
-              <Link href={pathName + "/setting"} className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+              <Link
+                href={pathName + "/setting"}
+                className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300"
+              >
                 <ThreeDots color="white" size={24} />
               </Link>
             </div>
@@ -85,10 +102,10 @@ function SubbeditPage({ params }: { params: Params }) {
         {openedTab === 0 ? (
           <>
             <h3 className="text-2xl">Recent Posts: </h3>
-            {posts.length === 0 ? (
+            {posts?.length === 0 ? (
               <p>No posts yet.</p>
             ) : (
-              posts.map((post: PostWithUserAndSubbedit, index: number) => (
+              posts?.map((post: PostWithUserAndSubbedit, index: number) => (
                 <Post post={post} key={index} withUser />
               ))
             )}

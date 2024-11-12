@@ -1,4 +1,5 @@
 import { Role, User } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 
 interface MemberProps {
@@ -8,6 +9,7 @@ interface MemberProps {
 }
 
 const Member: React.FC<MemberProps> = ({ user, currentRole, subbeditName }) => {
+  const queryClient = useQueryClient();
   const [role, setRole] = useState<Role>(currentRole);
 
   const toggleRole = async () => {
@@ -27,9 +29,22 @@ const Member: React.FC<MemberProps> = ({ user, currentRole, subbeditName }) => {
     setRole(newRole);
   };
 
+  const { mutateAsync: toggleRoleMutation } = useMutation({
+    mutationFn: () => toggleRole(),
+    onSuccess: () => {
+      queryClient.setQueryData<Role>(
+        ["subbeditMembers", { subbeditName }],
+        (oldRole) => {
+          return oldRole === Role.MODERATOR ? Role.MEMBER : Role.MODERATOR;
+        },
+      );
+    },
+    mutationKey: ["removeFlair", subbeditName],
+  });
+
   return (
     <button
-      onClick={toggleRole}
+      onClick={async () => await toggleRoleMutation()}
       key={user.id}
       className="flex items-center gap-2 rounded bg-white p-1"
     >
