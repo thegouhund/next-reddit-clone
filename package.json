@@ -26,9 +26,9 @@
     "next-auth": "^5.0.0-beta.25",
     "prettier": "^3.3.3",
     "prisma": "^5.22.0",
-    "react": "^19.0.0-rc-66855b96-20241106",
+    "react": "19.0.0-rc-66855b96-20241106",
     "react-bootstrap-icons": "^1.11.4",
-    "react-dom": "^19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-markdown": "8.0.6",
     "uploadthing": "^7.3.0",
     "zustand": "^5.0.1"
