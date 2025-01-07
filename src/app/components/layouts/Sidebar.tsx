@@ -1,17 +1,37 @@
 "use client";
-import { Subbedit } from "@prisma/client";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import useSubbedit from "@/app/hooks/useSubbedit";
 import { Cake, Globe } from "react-bootstrap-icons";
 import JoinSubbeditButton from "../elements/JoinSubbeditButton";
-import useSubbedit from "@/app/hooks/useSubbedit";
+import { useState } from "react";
+import CreateSubbedit from "../elements/Popup/CreateSubbedit";
+
+const SidebarWithoutSubbedit = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  return (
+    <div className="flex w-full flex-col gap-4">
+      <h2 className="text-xl font-bold">Welcome to beddit!!</h2>
+      <p className="text-gray-600">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam,
+        enim.
+      </p>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="rounded bg-blue-400 p-2 font-bold text-white"
+      >
+        Create a Subbedit!
+      </button>
+      <CreateSubbedit isOpen={isOpen} setIsOpen={setIsOpen} />
+    </div>
+  );
+};
 
 const Sidebar = () => {
   const { subbedit } = useSubbedit();
 
   return (
     <aside className="sticky top-4 h-[calc(95vh-4rem)] w-[350px] overflow-y-auto rounded border border-gray-400 p-4 max-[900px]:hidden">
-      {!subbedit?.name && <div>Welcome to beddit!!</div>}
+      {!subbedit?.name && <SidebarWithoutSubbedit />}
       {subbedit?.name && !subbedit && (
         <div className="flex w-full animate-pulse flex-col gap-4">
           {[...Array(5)].map((_, index) => (
