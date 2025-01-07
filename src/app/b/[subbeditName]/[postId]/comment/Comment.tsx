@@ -78,7 +78,11 @@ const Comment: FC<CommentProps> = ({
         <div className="flex items-start gap-2">
           <Image
             className="inline-block rounded-full"
-            src="https://i.pravatar.cc/40"
+            src={
+              comment.User.profilePicUrl
+                ? comment.User.profilePicUrl
+                : "https://i.pravatar.cc/40"
+            }
             alt="Avatar"
             width={30}
             height={30}

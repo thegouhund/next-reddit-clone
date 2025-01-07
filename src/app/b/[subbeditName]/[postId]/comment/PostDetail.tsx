@@ -69,7 +69,11 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }) => {
       <div className="flex gap-2">
         <Image
           className="inline-block self-center rounded-full"
-          src="https://i.pravatar.cc/40"
+          src={
+            post.User.profilePicUrl
+              ? post.User.profilePicUrl
+              : "https://i.pravatar.cc/40"
+          }
           alt="Avatar"
           width={40}
           height={40}

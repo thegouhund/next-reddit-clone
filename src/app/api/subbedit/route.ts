@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
   const existingSubbedit = await prisma.subbedit.findUnique({
     where: { name: body.name },
   });
+  
   if (existingSubbedit) {
     return NextResponse.json(
       { message: "Subbedit with this name already exists" },

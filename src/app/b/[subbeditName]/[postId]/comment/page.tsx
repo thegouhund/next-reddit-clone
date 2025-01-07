@@ -47,10 +47,12 @@ const CommentPage = ({ params }: { params: Params }) => {
   );
 
   const { data: post, isLoading } = useQuery<PostWithUserAndSubbedit>({
-    queryFn: () =>
-      fetch(`/api/subbedit/${subbeditName}/post/${postId}`).then((res) =>
-        res.json(),
-      ),
+    queryFn: async () => {
+      const res = await fetch(`/api/subbedit/${subbeditName}/post/${postId}`);
+      const data = await res.json();
+      setComments(data.Comment);
+      return data;
+    },
     queryKey: ["subbeditPosts"],
   });
 
