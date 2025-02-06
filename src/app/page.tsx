@@ -17,7 +17,7 @@ export default function Home() {
         {Array.from({ length: 3 }, (_, i) => (
           <div
             key={i}
-            className="mb-4 flex flex-col gap-2 rounded border border-gray-400 p-4"
+            className="mb-4 flex flex-col gap-2 rounded-lg bg-gray-800 p-4"
           >
             <Skeleton width={80} />
             <Skeleton />

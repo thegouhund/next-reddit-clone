@@ -37,26 +37,29 @@ function SubbeditPage({ params }: { params: Params }) {
 
   if (isLoading) {
     return (
-      <div className="w-full">
+      <div className="w-full space-y-4 lg:w-2/3">
         <h2 className="text-3xl">b/{subbeditName}</h2>
         <h3 className="text-2xl">Recent Posts: </h3>
         <div className="w-full">
-          {Array.from({ length: 3 }, (_, i) => (
-            <div key={i} className="flex flex-col gap-2 mb-4 rounded border border-gray-400 p-4">
-              <Skeleton width={80} />
-              <Skeleton />
-              <Skeleton width="80%" />
-              <Skeleton height={400} width="50%" />
-            </div>
-          ))}
-        </div>
+        {Array.from({ length: 3 }, (_, i) => (
+          <div
+            key={i}
+            className="mb-4 flex flex-col gap-2 rounded-lg bg-gray-800 p-4"
+          >
+            <Skeleton width={80} />
+            <Skeleton />
+            <Skeleton width="80%" />
+            <Skeleton height={400} width="50%" />
+          </div>
+        ))}
       </div>
+        </div>
     );
   }
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full space-y-4 lg:w-2/3">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl">b/{subbeditName}</h2>
           {isJoined ? (

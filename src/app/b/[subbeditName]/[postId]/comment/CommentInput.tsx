@@ -14,9 +14,9 @@ const CommentInput: React.FC<CommentInputProps> = ({
   onSubmit,
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <textarea
-        className="w-full rounded-lg border border-gray-700 p-4 focus:outline-none"
+        className="w-full rounded-lg border border-gray-700 p-4 focus:outline-none dark:bg-inherit"
         placeholder="Add a comment"
         name="text"
         autoFocus

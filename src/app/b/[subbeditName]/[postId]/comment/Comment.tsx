@@ -1,13 +1,10 @@
+import UpvoteButton from "@/app/components/elements/UpvoteButton";
 import useLoginPopup from "@/app/hooks/useLoginPopup";
 import { CommentWithUser } from "@/app/types/comment";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { FC, useState } from "react";
-import { Chat } from "react-bootstrap-icons";
-import ReactMarkdown from "react-markdown";
+import { Person, Reply } from "react-bootstrap-icons";
 import CommentInput from "./CommentInput";
-import UpvoteButton from "@/app/components/elements/UpvoteButton";
-import Image from "next/image";
 
 interface CommentProps {
   comment: CommentWithUser;
@@ -26,6 +23,7 @@ const Comment: FC<CommentProps> = ({
   const [commentText, setCommentText] = useState<string>("");
   const { data: session } = useSession();
   const { openLoginPopup } = useLoginPopup();
+  const isSessionAuthor: boolean = comment.User.id === parseInt(session?.user.id as string);
 
   const handleCommentSubmit = async () => {
     if (!session) {
@@ -54,7 +52,8 @@ const Comment: FC<CommentProps> = ({
       const newCommentElement = document.getElementById(`comment-${data.id}`);
       if (newCommentElement) {
         newCommentElement.scrollIntoView({ behavior: "smooth" });
-        newCommentElement.style.backgroundColor = "#DDD";
+        newCommentElement.style.backgroundColor = "#6d727a";
+        newCommentElement.style.borderRadius = "8px";
         setTimeout(() => {
           newCommentElement.style.backgroundColor = "";
         }, 3000);
@@ -70,10 +69,11 @@ const Comment: FC<CommentProps> = ({
     <div
       key={comment.id}
       id={`comment-${comment.id}`}
-      className="relative mb-3 rounded transition-colors"
+      className="mb-4"
       style={{ marginLeft: `${indentation}px` }}
     >
-      <div className="absolute bottom-0 top-0 w-[2px] bg-gray-300"></div>
+      <div className="border-l border-gray-100 pl-4"></div>
+      {/* <div className="absolute bottom-0 top-0 w-[2px] bg-gray-300"></div>
       <div className="ml-2">
         <div className="flex items-start gap-2">
           <Image
@@ -119,6 +119,34 @@ const Comment: FC<CommentProps> = ({
               />
             )}
           </div>
+        </div>
+      </div> */}
+
+      <div className="flex gap-4">
+        <UpvoteButton comment={comment} />
+        <div className="flex-1">
+          <div className="mb-1 flex items-center gap-1 text-sm text-gray-400">
+            {isSessionAuthor && <Person color="green" size={14} />}
+            {comment.User.username} • 5 mins ago
+          </div>
+          <p className="mb-2 text-sm">{comment.body}</p>
+          <div className="mb-2 flex items-center space-x-4 text-gray-400">
+            <div
+              className="flex cursor-pointer items-center space-x-1"
+              onClick={() => setShowReplyBox(true)}
+            >
+              <Reply color="#9ca3af" size={14} />
+              <span className="text-xs">Reply</span>
+            </div>
+          </div>
+          {showReplyBox && (
+            <CommentInput
+              commentText={commentText}
+              handleTextChange={handleTextChange}
+              onCancel={() => setShowReplyBox(false)}
+              onSubmit={handleCommentSubmit}
+            />
+          )}
         </div>
       </div>
     </div>

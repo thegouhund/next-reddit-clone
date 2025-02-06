@@ -18,7 +18,7 @@ async function createUsers(count: number) {
     Array.from({ length: count }, () =>
       prisma.user.create({
         data: {
-          username: faker.internet.userName(),
+          username: faker.internet.username(),
           email: faker.internet.email(),
         },
       }),

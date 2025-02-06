@@ -3,7 +3,12 @@ import { CommentWithUser } from "@/app/types/comment";
 import { PostWithUserAndSubbedit } from "@/app/types/post";
 import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState } from "react";
-import { ArrowDownShort, ArrowUpShort } from "react-bootstrap-icons";
+import {
+  ArrowDownShort,
+  ArrowUpShort,
+  CaretDownFill,
+  CaretUpFill,
+} from "react-bootstrap-icons";
 
 interface UpvoteButtonProps {
   post?: PostWithUserAndSubbedit;
@@ -81,28 +86,43 @@ const UpvoteButton: React.FC<UpvoteButtonProps> = ({
   );
 
   return (
-    <div
-      className={`${variant === "ghost" ? "bg-transparent" : "bg-gray-200"} flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-gray-300`}
-    >
-      <button
+    // <div
+    //   className={`${variant === "ghost" ? "bg-transparent" : "bg-gray-200"} flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-gray-300`}
+    // >
+    //   <button
+    //     onClick={() => handleVote(true)}
+    //     className={`rounded-lg border border-transparent hover:border-gray-400 hover:text-blue-500`}
+    //   >
+    //     <ArrowUpShort
+    //       color={voteState.isUpvoted ? "#3b82f6" : "black"}
+    //       size={20}
+    //     />
+    //   </button>
+    //   <p>{voteState.upvote}</p>
+    //   <button
+    //     onClick={() => handleVote(false)}
+    //     className={`rounded-lg border border-transparent p-0 hover:border-gray-400 hover:text-red-500`}
+    //   >
+    //     <ArrowDownShort
+    //       color={voteState.isDownvoted ? "#ef4444" : "black"}
+    //       size={20}
+    //     />
+    //   </button>
+    // </div>
+    <div className="flex flex-col items-center justify-center">
+      <CaretUpFill
+        className="cursor-pointer text-gray-400 hover:text-blue-500"
+        color={voteState.isUpvoted ? "green" : "white"}
+        size={20}
         onClick={() => handleVote(true)}
-        className={`rounded-lg border border-transparent hover:border-gray-400 hover:text-blue-500`}
-      >
-        <ArrowUpShort
-          color={voteState.isUpvoted ? "#3b82f6" : "black"}
-          size={20}
-        />
-      </button>
-      <p>{voteState.upvote}</p>
-      <button
+      />
+      <span className="my-1 text-sm font-bold">{voteState.upvote}</span>
+      <CaretDownFill
+        className="cursor-pointer text-gray-400 hover:text-red-500"
+        color={voteState.isDownvoted ? "#ef4444" : "white"}
+        size={20}
         onClick={() => handleVote(false)}
-        className={`rounded-lg border border-transparent p-0 hover:border-gray-400 hover:text-red-500`}
-      >
-        <ArrowDownShort
-          color={voteState.isDownvoted ? "#ef4444" : "black"}
-          size={20}
-        />
-      </button>
+      />
     </div>
   );
 };

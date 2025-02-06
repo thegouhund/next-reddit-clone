@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description: "My Reddit clone",
 };
 
-export const fetchCache = "force-cache"
+export const fetchCache = "force-cache";
 
 export default function RootLayout({
   children,
@@ -33,7 +33,7 @@ export default function RootLayout({
     <Wrapper>
       <html
         lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:text-white dark:bg-gray-900`}
       >
         <body>
           <Navbar />

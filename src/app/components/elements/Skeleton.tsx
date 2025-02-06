@@ -16,7 +16,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
       style={{
         height,
         width: width || "100%",
-        backgroundColor: "lightgray",
+        backgroundColor: "#374151",
         borderRadius: isRound ? "100%" : undefined,
       }}
       className="animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700"

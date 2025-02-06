@@ -13,11 +13,11 @@ const LoginPopup = () => {
     <>
       {showLoginPopup && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={handleClose}
         >
           <div
-            className="relative w-96 rounded-lg bg-white p-8 shadow-lg"
+            className="relative w-96 rounded-lg dark:bg-gray-800 p-8 shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -48,7 +48,7 @@ const LoginPopup = () => {
                 </p>
               </button>
             </div>
-            <p className="mt-4 text-sm text-gray-600">
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
               Don&apos;t have an account?{" "}
               <span
                 className="text-blue-600 hover:text-blue-800"
