@@ -27,6 +27,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    reactCompiler: true,
+  },
 };
 
 export default nextConfig;
