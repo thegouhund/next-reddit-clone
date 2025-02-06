@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('CREATOR', 'MODERATOR', 'MEMBER');
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
@@ -5,6 +8,7 @@ CREATE TABLE "user" (
     "email" VARCHAR(255) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "profilePicUrl" TEXT,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -25,6 +29,7 @@ CREATE TABLE "UserSubbedit" (
     "userId" INTEGER NOT NULL,
     "subbeditId" INTEGER NOT NULL,
     "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "role" "Role" NOT NULL DEFAULT 'MEMBER',
 
     CONSTRAINT "UserSubbedit_pkey" PRIMARY KEY ("id")
 );
@@ -40,6 +45,8 @@ CREATE TABLE "post" (
     "subbeditId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "flairId" INTEGER,
+    "mediaUrl" TEXT,
 
     CONSTRAINT "post_pkey" PRIMARY KEY ("id")
 );
@@ -56,6 +63,29 @@ CREATE TABLE "comment" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "comment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Vote" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "postId" INTEGER,
+    "commentId" INTEGER,
+    "isUpvote" BOOLEAN NOT NULL,
+
+    CONSTRAINT "Vote_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Flair" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "color" VARCHAR(7) NOT NULL,
+    "subbeditId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Flair_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -83,6 +113,9 @@ CREATE INDEX "subbeditId" ON "post"("subbeditId");
 CREATE INDEX "user_id_post" ON "post"("userId");
 
 -- CreateIndex
+CREATE INDEX "post_flairId_idx" ON "post"("flairId");
+
+-- CreateIndex
 CREATE INDEX "parentCommentId" ON "comment"("parentCommentId");
 
 -- CreateIndex
@@ -91,11 +124,17 @@ CREATE INDEX "postId" ON "comment"("postId");
 -- CreateIndex
 CREATE INDEX "user_id_comment" ON "comment"("userId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Vote_userId_postId_commentId_key" ON "Vote"("userId", "postId", "commentId");
+
+-- AddForeignKey
+ALTER TABLE "UserSubbedit" ADD CONSTRAINT "UserSubbedit_subbeditId_fkey" FOREIGN KEY ("subbeditId") REFERENCES "subbedit"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- AddForeignKey
 ALTER TABLE "UserSubbedit" ADD CONSTRAINT "UserSubbedit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSubbedit" ADD CONSTRAINT "UserSubbedit_subbeditId_fkey" FOREIGN KEY ("subbeditId") REFERENCES "subbedit"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "post" ADD CONSTRAINT "post_flairId_fkey" FOREIGN KEY ("flairId") REFERENCES "Flair"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "post" ADD CONSTRAINT "post_ibfk_1" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -111,3 +150,15 @@ ALTER TABLE "comment" ADD CONSTRAINT "comment_ibfk_2" FOREIGN KEY ("postId") REF
 
 -- AddForeignKey
 ALTER TABLE "comment" ADD CONSTRAINT "comment_ibfk_3" FOREIGN KEY ("parentCommentId") REFERENCES "comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Vote" ADD CONSTRAINT "Vote_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Vote" ADD CONSTRAINT "Vote_postId_fkey" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Vote" ADD CONSTRAINT "Vote_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Flair" ADD CONSTRAINT "Flair_subbeditId_fkey" FOREIGN KEY ("subbeditId") REFERENCES "subbedit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
