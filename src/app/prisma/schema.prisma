@@ -24,13 +24,15 @@ model User {
 }
 
 model Subbedit {
-  id        Int            @id @default(autoincrement())
-  name      String         @unique(map: "name") @db.VarChar(255)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  Flair     Flair[]
-  Users     UserSubbedit[]
-  Post      Post[]
+  id          Int            @id @default(autoincrement())
+  name        String         @unique(map: "name") @db.VarChar(255)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  description String?        
+  rules       String?
+  Flair       Flair[]
+  Users       UserSubbedit[]
+  Post        Post[]
 
   @@map("subbedit")
 }
