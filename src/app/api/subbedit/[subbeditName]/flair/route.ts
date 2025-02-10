@@ -20,12 +20,23 @@ export async function POST(
 ) {
   const body = await request.json();
 
+  const subbedit = await prisma.subbedit.findUnique({
+    where: { name: params.subbeditName },
+  });
+
+  if (!subbedit) {
+    return NextResponse.json(
+      { message: "Subbedit not found" },
+      { status: 404 },
+    );
+  }
+
   const flair = await prisma.flair.create({
     data: {
       name: body.name,
       description: body.description,
       color: body.color,
-      subbeditId: 1,
+      subbeditId: subbedit.id,
     },
   });
 

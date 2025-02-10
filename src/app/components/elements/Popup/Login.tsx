@@ -17,7 +17,7 @@ const LoginPopup = () => {
           onClick={handleClose}
         >
           <div
-            className="relative w-96 rounded-lg dark:bg-gray-800 p-8 shadow-lg"
+            className="relative w-96 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -30,7 +30,7 @@ const LoginPopup = () => {
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => signIn("google")}
-                className="flex items-center justify-center gap-2 rounded-md border bg-white px-4 py-3 transition-all hover:border-blue-100 hover:bg-blue-200 hover:bg-opacity-5"
+                className="flex items-center justify-center gap-2 rounded-md border bg-white px-4 py-3 transition-all hover:border-blue-100 hover:bg-gray-200"
               >
                 <GoogleIcon />
                 <p className="flex-1 text-center text-sm text-gray-700">

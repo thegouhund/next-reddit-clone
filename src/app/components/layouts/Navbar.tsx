@@ -91,7 +91,12 @@ export const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <Moon className="cursor-pointer" color="white" size={20} />
+          <Moon
+            className="cursor-pointer"
+            color="white"
+            size={20}
+            onClick={() => document.documentElement.classList.toggle("dark")}
+          />
           <Bell className="cursor-pointer" color="white" size={20} />
           <Chat className="cursor-pointer" color="white" size={20} />
           {session ? (

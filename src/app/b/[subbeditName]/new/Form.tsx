@@ -1,6 +1,7 @@
 import { UploadButton } from "@/app/components/elements/UploadThing";
+import { Button } from "@/components/ui/button";
 import MDEditor from "@uiw/react-md-editor";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 interface FormProps {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -21,6 +22,8 @@ const Form: React.FC<FormProps> = ({
   title,
   setMediaUrl,
 }) => {
+  const [isValid, setIsValid] = useState<boolean>(false);
+
   const handleTitleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(e.target.value);
@@ -35,6 +38,7 @@ const Form: React.FC<FormProps> = ({
     [setContent],
   );
 
+
   return (
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
       <input
@@ -42,7 +46,7 @@ const Form: React.FC<FormProps> = ({
         type="text"
         id="title"
         name="title"
-        className="w-full rounded bg-slate-300 p-4"
+        className="w-full rounded-lg bg-gray-300 p-4 dark:bg-gray-800 outline-none"
         value={title}
         onChange={handleTitleChange}
       />
@@ -50,28 +54,41 @@ const Form: React.FC<FormProps> = ({
       {selectedPostType === "text" ? (
         <>
           {/* Causing hydration error */}
-          <MDEditor
+          {/* <MDEditor
             height={400}
             value={content}
             onChange={handleContentChange}
             autoCapitalize="off"
+          /> */}
+
+          <textarea
+            placeholder="Content"
+            id="content"
+            name="content"
+            className="w-full resize rounded-lg bg-gray-300 p-4 dark:bg-gray-800 outline-none"
+            value={content}
+            onChange={(e) => handleContentChange(e.target.value)}
           />
         </>
       ) : (
         <UploadButton
-          className="h-[200px] w-full"
+          className="h-[200px] w-full rounded-lg dark:bg-gray-800"
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             console.log("Files: ", res);
             alert(res[0].url);
             setMediaUrl(res[0].url);
+            setIsValid(true);
           }}
         />
       )}
       <div className="flex justify-end">
-        <button className="rounded bg-orange-400 p-4" type="submit">
+        <Button
+          className="bg-blue-400 text-white hover:bg-blue-500"
+          disabled={!isValid}
+        >
           Submit
-        </button>
+        </Button>
       </div>
     </form>
   );
