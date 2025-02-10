@@ -16,7 +16,7 @@ const SettingPage = ({ params }: { params: Params }) => {
   const { subbeditName } = use(params);
 
   return (
-    <div className="flex h-fit w-full flex-col gap-2 rounded-lg bg-gray-800 p-4">
+    <div className="flex h-fit w-full flex-col gap-2 rounded-lg bg-secondary p-4">
       <h1 className="mb-2 text-2xl font-bold">
         Subreddit Settings: b/{subbeditName}
       </h1>

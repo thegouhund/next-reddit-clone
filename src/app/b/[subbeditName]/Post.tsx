@@ -16,7 +16,7 @@ const Post: FC<PostProps> = ({ post, inSubbedit }) => {
 
   return (
     // <article
-    //   className="mb-4 cursor-pointer rounded p-4 transition-colors  dark:bg-gray-800"
+    //   className="mb-4 cursor-pointer rounded p-4 transition-colors  dark:bg-secondary"
     //   onClick={() =>
     //     router.push(
     //       `/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`,
@@ -95,7 +95,7 @@ const Post: FC<PostProps> = ({ post, inSubbedit }) => {
 
     <article
       key={post.id}
-      className="mb-4 rounded-lg bg-gray-800 p-4"
+      className="bg-secondary mb-4 rounded-lg p-4"
       // onClick={() =>
       //   router.push(
       //     `/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`,
@@ -141,7 +141,7 @@ const Post: FC<PostProps> = ({ post, inSubbedit }) => {
           <Link
             href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
           >
-            <h2 className="mb-2 text-lg font-semibold hover:text-blue-400">
+            <h2 className="hover:text-accent mb-2 text-lg font-semibold">
               {post.title}
             </h2>
           </Link>
@@ -150,9 +150,9 @@ const Post: FC<PostProps> = ({ post, inSubbedit }) => {
             <Image
               src={post.mediaUrl}
               alt="Image Post"
-              width={600}
-              height={400}
-              className="mb-4 max-h-96 w-full rounded-lg object-cover"
+              width={800}
+              height={500}
+              className="mb-4 max-h-96 w-1/3 rounded-lg object-cover"
             />
           )}
           <div className="flex cursor-pointer items-center space-x-4 text-gray-400">

@@ -12,7 +12,7 @@ const Dropdown = ({
 }) => {
   return (
     <div
-      className={`transition-max-height absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded border border-gray-200 bg-white shadow-lg drop-shadow-lg duration-300 dark:border-gray-800 dark:bg-gray-800 dark:text-white ${
+      className={`transition-max-height absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded border border-gray-200 bg-white shadow-lg drop-shadow-lg duration-300 dark:border-gray-800 dark:bg-secondary dark:text-white ${
         isOpen ? "max-h-40" : "max-h-0 border-none"
       }`}
     >

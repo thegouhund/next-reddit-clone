@@ -71,7 +71,7 @@ const PostDetail: FC<PostDetailProps> = ({ post, addComment }) => {
     <>
       <main className="container mx-auto flex">
         <div className="w-full">
-          <div className="mb-4 rounded-lg bg-gray-800 p-4">
+          <div className="mb-4 rounded-lg bg-secondary p-4">
             <div className="flex gap-2">
               <div className="flex flex-col items-center gap-2">
                 <Image

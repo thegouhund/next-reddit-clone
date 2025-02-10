@@ -33,12 +33,12 @@ export default function RootLayout({
     <Wrapper>
       <html
         lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} bg-white antialiased dark:bg-gray-900 dark:dark:text-white dark`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-white antialiased dark:bg-primary dark:dark:text-white dark`}
       >
         <body>
           <Navbar />
           <LoginPopup />
-          <main className="flex gap-4 px-4 py-4">
+          <main className="flex gap-4 px-4 py-4 min-h-dvh">
             {children}
             <Sidebar />
           </main>

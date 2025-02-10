@@ -23,7 +23,8 @@ const Comment: FC<CommentProps> = ({
   const [commentText, setCommentText] = useState<string>("");
   const { data: session } = useSession();
   const { openLoginPopup } = useLoginPopup();
-  const isSessionAuthor: boolean = comment.User.id === parseInt(session?.user.id as string);
+  const isSessionAuthor: boolean =
+    comment.User.id === parseInt(session?.user.id as string);
 
   const handleCommentSubmit = async () => {
     if (!session) {
@@ -52,7 +53,7 @@ const Comment: FC<CommentProps> = ({
       const newCommentElement = document.getElementById(`comment-${data.id}`);
       if (newCommentElement) {
         newCommentElement.scrollIntoView({ behavior: "smooth" });
-        newCommentElement.style.backgroundColor = "#6d727a";
+        newCommentElement.style.backgroundColor = "#101828";
         newCommentElement.style.borderRadius = "8px";
         setTimeout(() => {
           newCommentElement.style.backgroundColor = "";

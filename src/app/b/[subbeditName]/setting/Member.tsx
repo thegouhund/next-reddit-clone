@@ -46,7 +46,7 @@ const Member: React.FC<MemberProps> = ({ user, currentRole, subbeditName }) => {
     <button
       onClick={async () => await toggleRoleMutation()}
       key={user.id}
-      className={`${role == Role.CREATOR && "bg-yellow-400"} flex items-center gap-2 rounded bg-white p-1 dark:bg-gray-900`}
+      className={`${role == Role.CREATOR && "bg-yellow-400"} flex items-center gap-2 rounded bg-white p-1 dark:bg-primary`}
     >
       <p>
         {user.username + " "}

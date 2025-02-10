@@ -80,7 +80,7 @@ const CommentPage = ({ params }: { params: Params }) => {
       <div className="flex w-full flex-col gap-2">
         {post && <PostDetail post={post} addComment={addComment} />}
         {/* <div className="flex flex-col gap-3">{memoizedComments}</div> */}
-        <div className="min-h-[150px] rounded-lg bg-gray-800 p-4">
+        <div className="min-h-[150px] rounded-lg bg-secondary p-4">
           <h2 className="mb-4 text-lg font-semibold">Comments</h2>
           {memoizedComments.length > 0 ? (
             memoizedComments

@@ -38,7 +38,7 @@ const JoinSubbeditButton: React.FC<JoinSubbeditButtonProps> = ({
 
   return (
     <button onClick={handleJoinSubbedit} className={isJoined ? "hidden" : ""}>
-      <p className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+      <p className="rounded bg-accent p-2 font-bold text-white transition-all hover:bg-accent-hover">
         + Join
       </p>
     </button>

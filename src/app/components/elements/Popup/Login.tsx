@@ -17,7 +17,7 @@ const LoginPopup = () => {
           onClick={handleClose}
         >
           <div
-            className="relative w-96 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800"
+            className="relative w-96 rounded-lg bg-white p-8 shadow-lg dark:bg-secondary"
             onClick={(e) => e.stopPropagation()}
           >
             <button

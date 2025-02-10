@@ -59,7 +59,7 @@ const SubbeditDetail: React.FC<SubbeditDetailProps> = ({ subbeditName }) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="rounded-lg bg-gray-300 p-1 dark:bg-gray-900"
+          className="dark:bg-primary rounded-lg bg-gray-300 p-1"
         />
       </div>
       <div>
@@ -69,10 +69,14 @@ const SubbeditDetail: React.FC<SubbeditDetailProps> = ({ subbeditName }) => {
           value={rules}
           onChange={(e) => setRules(e.target.value)}
           rows={5}
-          className="rounded-lg bg-gray-300 p-1 dark:bg-gray-900"
+          className="dark:bg-primary rounded-lg bg-gray-300 p-1"
         />
       </div>
-      <Button type="submit" className="w-full" disabled={mutation.isPending}>
+      <Button
+        type="submit"
+        className="bg-accent w-full hover:bg-accent-hover text-white cursor-pointer"
+        disabled={mutation.isPending}
+      >
         {mutation.isPending ? "Saving..." : "Save Changes"}
       </Button>
       {mutation.isError && (

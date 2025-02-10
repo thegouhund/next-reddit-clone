@@ -6,5 +6,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "subbedit" ADD COLUMN     "description" TEXT NOT NULL,
-ADD COLUMN     "rules" TEXT NOT NULL;
+ALTER TABLE "subbedit" ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "rules" DROP NOT NULL;

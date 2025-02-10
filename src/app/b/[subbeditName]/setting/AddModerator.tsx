@@ -20,7 +20,7 @@ const AddModerator: React.FC<AddModeratorProps> = ({ subbeditName }) => {
   return (
     <div className="">
       <h3 className="text-lg">Add moderator</h3>
-      <div className="flex flex-wrap items-center gap-2 rounded-md bg-gray-200 p-2 dark:bg-gray-900">
+      <div className="flex flex-wrap items-center gap-2 rounded-md bg-gray-200 p-2 dark:bg-primary">
         {isLoading
           ? Array.from({ length: 10 }, (_, i) => (
               <Skeleton key={i} height={30} width={80} />

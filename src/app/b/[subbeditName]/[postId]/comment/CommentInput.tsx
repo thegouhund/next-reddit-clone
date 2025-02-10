@@ -16,7 +16,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
   return (
     <div className="w-full">
       <textarea
-        className="w-full rounded-lg border border-gray-700 p-4 focus:outline-none dark:bg-inherit"
+        className="w-full rounded-lg border border-gray-700 p-4 focus:outline-hidden dark:bg-inherit"
         placeholder="Add a comment"
         name="text"
         autoFocus
@@ -25,13 +25,13 @@ const CommentInput: React.FC<CommentInputProps> = ({
       />
       <div className="flex justify-end gap-2">
         <button
-          className="rounded bg-gray-700 px-2 py-1 text-sm text-white"
+          className="cursor-pointer rounded-lg bg-gray-700 px-2 py-1 text-sm text-white"
           onClick={onCancel}
         >
           Cancel
         </button>
         <button
-          className="rounded bg-gray-500 px-2 py-1 text-sm text-white"
+          className="cursor-pointer bg-accent cursor-pointer rounded-lg px-2 py-1 text-sm text-white"
           onClick={onSubmit}
         >
           Comment

@@ -60,7 +60,7 @@ const NewFlairForm: React.FC<NewFlairFormProps> = ({ subbeditName }) => {
           value={newFlairName}
           onChange={(e) => setNewFlairName(e.target.value)}
           placeholder="Enter new Flair"
-          className="rounded bg-gray-300 p-1 dark:bg-gray-900"
+          className="rounded bg-gray-300 p-1 dark:bg-primary"
         />
         <input
           type="color"
@@ -110,7 +110,7 @@ const FlairList: React.FC<FlairListProps> = ({ subbeditName }) => {
   });
 
   return (
-    <div className="flex flex-wrap gap-2 rounded-md bg-gray-200 p-2 dark:bg-gray-900">
+    <div className="flex flex-wrap gap-2 rounded-md bg-gray-200 p-2 dark:bg-primary">
       {isLoading ? (
         Array.from({ length: 30 }, (_, i) => (
           <Skeleton key={i} height={24} width={80} />

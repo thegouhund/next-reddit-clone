@@ -61,12 +61,12 @@ const CreateSubbedit: React.FC<CreateSubbeditProps> = ({
               <input
                 type="text"
                 name="name"
-                className="w-full rounded border p-1 focus:outline-none"
+                className="w-full rounded border p-1 focus:outline-hidden"
               />
             </div>
             <button
               type="submit"
-              className="mt-4 rounded bg-blue-400 p-2 text-sm text-white"
+              className="mt-4 rounded bg-accent p-2 text-sm text-white"
             >
               Create Subreddit
             </button>

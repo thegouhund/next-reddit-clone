@@ -44,7 +44,7 @@ function SubbeditPage({ params }: { params: Params }) {
         {Array.from({ length: 3 }, (_, i) => (
           <div
             key={i}
-            className="mb-4 flex flex-col gap-2 rounded-lg bg-gray-800 p-4"
+            className="mb-4 flex flex-col gap-2 rounded-lg bg-secondary p-4"
           >
             <Skeleton width={80} />
             <Skeleton />
@@ -65,7 +65,7 @@ function SubbeditPage({ params }: { params: Params }) {
           {isJoined ? (
             <div className="flex items-center gap-4">
               <Link href={pathName + "/new"}>
-                <button className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300">
+                <button className="rounded bg-accent p-2 font-bold text-white transition-all hover:bg-accent-hover">
                   <div className="flex items-center gap-1">
                     <Plus color="white" size={24} />
                     Create New Post
@@ -74,7 +74,7 @@ function SubbeditPage({ params }: { params: Params }) {
               </Link>
               <Link
                 href={pathName + "/setting"}
-                className="rounded bg-blue-400 p-2 font-bold text-white transition-all hover:bg-blue-300"
+                className="rounded bg-accent p-2 font-bold text-white transition-all hover:bg-accent-hover"
               >
                 <ThreeDots color="white" size={24} />
               </Link>

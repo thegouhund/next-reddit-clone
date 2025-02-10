@@ -46,7 +46,7 @@ const Form: React.FC<FormProps> = ({
         type="text"
         id="title"
         name="title"
-        className="w-full rounded-lg bg-gray-300 p-4 dark:bg-gray-800 outline-none"
+        className="w-full rounded-lg bg-gray-300 p-4 dark:bg-secondary outline-hidden"
         value={title}
         onChange={handleTitleChange}
       />
@@ -65,14 +65,14 @@ const Form: React.FC<FormProps> = ({
             placeholder="Content"
             id="content"
             name="content"
-            className="w-full resize rounded-lg bg-gray-300 p-4 dark:bg-gray-800 outline-none"
+            className="w-full resize rounded-lg bg-gray-300 p-4 dark:bg-secondary outline-hidden"
             value={content}
             onChange={(e) => handleContentChange(e.target.value)}
           />
         </>
       ) : (
         <UploadButton
-          className="h-[200px] w-full rounded-lg dark:bg-gray-800"
+          className="h-[200px] w-full rounded-lg dark:bg-secondary"
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             console.log("Files: ", res);
@@ -84,7 +84,7 @@ const Form: React.FC<FormProps> = ({
       )}
       <div className="flex justify-end">
         <Button
-          className="bg-blue-400 text-white hover:bg-blue-500"
+          className="bg-accent text-white hover:bg-blue-500"
           disabled={!isValid}
         >
           Submit

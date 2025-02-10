@@ -25,13 +25,13 @@ const Options: React.FC<OptionsProps> = ({
           setSelectedPostType("text");
           setMediaUrl(null);
         }}
-        className={`${selectedPostType === "text" ? "bg-blue-400" : "bg-gray-400 dark:bg-gray-800"} rounded-md px-2 text-black dark:text-white`}
+        className={`${selectedPostType === "text" ? "bg-accent" : "bg-gray-400 dark:bg-secondary"} rounded-md px-2 text-black dark:text-white`}
       >
         Text
       </button>
       <button
         onClick={() => setSelectedPostType("media")}
-        className={`${selectedPostType === "media" ? "bg-blue-400" : "bg-gray-400 dark:bg-gray-800"} rounded-md px-2 text-black dark:text-white`}
+        className={`${selectedPostType === "media" ? "bg-accent" : "bg-gray-400 dark:bg-secondary"} rounded-md px-2 text-black dark:text-white`}
       >
         Media
       </button>

@@ -71,7 +71,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="bg-gray-800 py-2 text-white">
+    <header className="bg-secondary py-2 text-white">
       <div className="mx-auto flex items-center justify-between px-4">
         <div className="flex items-center space-x-4">
           <Link href={"/"} className="text-2xl font-bold">
@@ -81,7 +81,7 @@ export const Navbar = () => {
             <input
               type="text"
               placeholder="Search Reddit"
-              className="w-64 rounded-full bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-64 rounded-full bg-primary px-4 py-2 text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <Search
               className="absolute right-3 top-2.5 text-gray-400"
