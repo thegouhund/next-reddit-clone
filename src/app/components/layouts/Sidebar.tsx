@@ -30,7 +30,7 @@ const Sidebar = () => {
   const { subbedit } = useSubbedit();
 
   return (
-    <aside className="sticky top-4 h-[calc(95vh-4rem)] w-[350px] overflow-y-auto rounded-lg p-4 max-[900px]:hidden dark:bg-gray-800">
+    <aside className="sticky top-4 h-[calc(95vh-4rem)] w-[350px] overflow-y-auto rounded-lg p-4 dark:bg-gray-800 max-[900px]:hidden">
       {!subbedit?.name && <SidebarWithoutSubbedit />}
       {subbedit?.name && !subbedit && (
         <div className="flex w-full animate-pulse flex-col gap-4">
@@ -45,10 +45,8 @@ const Sidebar = () => {
       {subbedit && (
         <div className="flex w-full flex-col gap-4">
           <h2 className="text-xl font-bold">About b/{subbedit.name}</h2>
-          <p className="text-gray-400">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-            Laboriosam, enim.
-          </p>
+          <p className="text-gray-400">{subbedit.description}</p>
+          <p className="text-gray-400">{subbedit.rules}</p>
           <div>
             <InfoItem
               icon={<Cake size={18} />}

@@ -76,7 +76,7 @@ const CommentPage = ({ params }: { params: Params }) => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full h-dvh">
       <div className="flex w-full flex-col gap-2">
         {post && <PostDetail post={post} addComment={addComment} />}
         {/* <div className="flex flex-col gap-3">{memoizedComments}</div> */}

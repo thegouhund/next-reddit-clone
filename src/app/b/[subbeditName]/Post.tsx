@@ -8,11 +8,10 @@ import { Chat, Share } from "react-bootstrap-icons";
 
 interface PostProps {
   post: PostWithUserAndSubbedit;
-  withUser?: boolean;
-  withSubbedit?: boolean;
+  inSubbedit: boolean;
 }
 
-const Post: FC<PostProps> = ({ post, withUser, withSubbedit }) => {
+const Post: FC<PostProps> = ({ post, inSubbedit }) => {
   const router = useRouter();
 
   return (
@@ -108,6 +107,37 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }) => {
           <UpvoteButton post={post} />
         </div>
         <div className="flex-1">
+          {inSubbedit ? (
+            <div className="flex gap-2">
+              <Image
+                className="inline-block self-center rounded-full"
+                src={
+                  post.User.profilePicUrl
+                    ? post.User.profilePicUrl
+                    : "https://i.pravatar.cc/40"
+                }
+                alt="Avatar"
+                width={20}
+                height={20}
+              />
+              <Link href={`#`} className="hover:text-green-400">
+                <p className="text-sm text-gray-400 transition-colors">
+                  u/{post.User.username}
+                </p>
+              </Link>
+            </div>
+          ) : (
+            <p className="flex gap-1 text-sm text-gray-400 transition-colors">
+              <Link
+                href={`/b/${post.Subbedit.name}`}
+                className="hover:text-orange-400"
+              >
+                b/{post.Subbedit.name}
+              </Link>
+              • {strToReadable(post.createdAt.toString())} ago
+            </p>
+          )}
+
           <Link
             href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
           >
@@ -115,15 +145,6 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }) => {
               {post.title}
             </h2>
           </Link>
-          <p className="mb-2 text-sm text-gray-400">
-            Posted by
-            <Link href={`#`}> u/{post.User.username}</Link>
-            in
-            <Link href={`/b/${post.Subbedit.name}`}>
-              b/{post.Subbedit.name}
-            </Link>
-            •{strToReadable(post.createdAt.toString())} ago
-          </p>
 
           {post.mediaUrl && (
             <Image
@@ -135,14 +156,13 @@ const Post: FC<PostProps> = ({ post, withUser, withSubbedit }) => {
             />
           )}
           <div className="flex cursor-pointer items-center space-x-4 text-gray-400">
-            <div className="flex items-center space-x-1">
-              <Chat color="white" size={16} />
+            <Link
+              href={`/b/${post.Subbedit.name}/${binaryToBase36(post.id)}/comment`}
+              className="flex cursor-pointer items-center space-x-1 rounded-lg p-1 duration-200 dark:hover:bg-gray-700"
+            >
+              <Chat color="#9ca3af" size={16} />
               <span className="text-sm">{post.commentCount} Comments</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Share color="white" size={16} />
-              <span className="text-sm">Share</span>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

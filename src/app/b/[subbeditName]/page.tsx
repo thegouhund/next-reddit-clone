@@ -59,7 +59,7 @@ function SubbeditPage({ params }: { params: Params }) {
 
   return (
     <>
-      <div className="w-full space-y-4 lg:w-2/3">
+      <div className="w-full space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl">b/{subbeditName}</h2>
           {isJoined ? (
@@ -109,7 +109,7 @@ function SubbeditPage({ params }: { params: Params }) {
               <p>No posts yet.</p>
             ) : (
               posts?.map((post: PostWithUserAndSubbedit, index: number) => (
-                <Post post={post} key={index} withUser />
+                <Post post={post} key={index} inSubbedit />
               ))
             )}
           </>

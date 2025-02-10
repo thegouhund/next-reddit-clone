@@ -54,7 +54,9 @@ const FormNewPost = ({ params }: { params: Params }) => {
 
   return (
     <div className="flex w-full flex-col gap-2">
-      <p>Create a new post at b/{subbeditName}</p>
+      <h2 className="text-lg font-semibold">
+        Create a new post at b/{subbeditName}
+      </h2>
       <Options
         selectedPostType={selectedPostType}
         setSelectedPostType={setSelectedPostType}

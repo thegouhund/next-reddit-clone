@@ -46,10 +46,10 @@ const Member: React.FC<MemberProps> = ({ user, currentRole, subbeditName }) => {
     <button
       onClick={async () => await toggleRoleMutation()}
       key={user.id}
-      className={`${role == Role.CREATOR && "bg-yellow-400"} flex items-center gap-2 rounded bg-white p-1`}
+      className={`${role == Role.CREATOR && "bg-yellow-400"} flex items-center gap-2 rounded bg-white p-1 dark:bg-gray-900`}
     >
       <p>
-        {user.username}
+        {user.username + " "}
         {role === Role.MEMBER ? "+" : role === Role.MODERATOR ? "x" : ""}
       </p>
     </button>
